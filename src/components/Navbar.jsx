@@ -1,7 +1,38 @@
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ onLogout, user }) => {
   const navigate = useNavigate();
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+    setIsProfileMenuOpen(false);
+  };
+
+  const handleLogoutClick = () => {
+    onLogout();
+    navigate("/login");
+    setIsProfileMenuOpen(false);
+  };
 
   return (
     <nav className="bg-white shadow-lg">
@@ -10,7 +41,12 @@ const Navbar = ({ onLogout, user }) => {
           {/* Logo/Brand */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-indigo-600">MoodSync</h1>
+              <h1
+                className="text-xl font-bold text-indigo-600 cursor-pointer"
+                onClick={() => navigate("/home")}
+              >
+                MoodSync
+              </h1>
             </div>
           </div>
 
@@ -28,8 +64,15 @@ const Navbar = ({ onLogout, user }) => {
                     : "No circle membership"}
                 </p>
               </div>
-              <div className="relative">
-                <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+            </div>
+
+            {/* Profile Menu */}
+            <div className="relative" ref={profileMenuRef}>
+              <button
+                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                className="relative flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium hover:bg-indigo-700 transition-colors">
                   {user.displayName
                     ? user.displayName.charAt(0).toUpperCase()
                     : "U"}
@@ -37,34 +80,52 @@ const Navbar = ({ onLogout, user }) => {
                 {user.circle && (
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                 )}
-              </div>
-            </div>
+                {/* Dropdown arrow */}
+                <svg
+                  className={`w-4 h-4 text-gray-400 transition-transform ${
+                    isProfileMenuOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
 
-            {/* Mobile User Avatar */}
-            <div className="sm:hidden">
-              <div className="relative">
-                <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  {user.displayName
-                    ? user.displayName.charAt(0).toUpperCase()
-                    : "U"}
+              {/* Profile Dropdown Menu */}
+              {isProfileMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-sm font-medium text-gray-900">
+                      {user.displayName || user.email}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {user.circle ? user.circle.name : "No circle"}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={handleProfileClick}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors"
+                  >
+                    👤 Profile Settings
+                  </button>
+
+                  <button
+                    onClick={handleLogoutClick}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 focus:outline-none focus:bg-red-50 transition-colors"
+                  >
+                    🚪 Logout
+                  </button>
                 </div>
-                {user.circle && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                )}
-              </div>
+              )}
             </div>
-
-            {/* Logout Button */}
-            <button
-              onClick={() => {
-                onLogout();
-                navigate("/login");
-              }}
-              className="bg-red-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
-            >
-              <span className="hidden sm:inline">Logout</span>
-              <span className="sm:hidden">Out</span>
-            </button>
           </div>
         </div>
       </div>

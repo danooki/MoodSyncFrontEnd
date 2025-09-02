@@ -16,7 +16,7 @@ const AuthLayout = () => {
   }
 
   if (user) {
-    return <Navigate to="/profile" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return <Outlet />;
