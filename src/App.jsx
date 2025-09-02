@@ -2,12 +2,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import AuthLayout from "./layouts/AuthLayout";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import FindYourMood from "./components/FindYourMood";
-import ProfileLayout from "./components/ProfileLayout";
-import ErrorHandler from "./components/ErrorHandler.jsx";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+import FindYourMoodPage from "./pages/FindYourMoodPage";
+import ProfilePage from "./pages/ProfilePage";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 const App = () => {
   return (
@@ -17,19 +17,19 @@ const App = () => {
 
         {/* Auth routes */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Route>
 
         {/* Protected routes - all nested under ProtectedLayout */}
         <Route element={<ProtectedLayout />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/find-your-mood" element={<FindYourMood />} />
-          <Route path="/profile" element={<ProfileLayout />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/find-your-mood" element={<FindYourMoodPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
         {/* Catch-all route for invalid paths - smart redirect based on auth status */}
-        <Route path="*" element={<ErrorHandler />} />
+        <Route path="*" element={<ErrorPage />} />
       </Route>
     </Routes>
   );

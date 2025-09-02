@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
 
-const ErrorHandler = () => {
+const ErrorPage = () => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -19,4 +19,4 @@ const ErrorHandler = () => {
   return <Navigate to={user ? "/home" : "/login"} replace />;
 };
 
-export default ErrorHandler;
+export default ErrorPage;

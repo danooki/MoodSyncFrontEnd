@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
-import Navbar from "./Navbar";
-import UserProfile from "./UserProfile";
+import Navbar from "../components/Navbar";
+import UserProfile from "../components/UserProfile";
 
-const ProfileLayout = () => {
+const ProfilePage = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -22,4 +22,4 @@ const ProfileLayout = () => {
   );
 };
 
-export default ProfileLayout;
+export default ProfilePage;
