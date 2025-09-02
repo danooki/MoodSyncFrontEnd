@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
 
-const Register = () => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
-    displayName: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,37 +18,14 @@ const Register = () => {
   };
 
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    // Basic validation
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters long");
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.displayName.length < 3) {
-      setError("Display name must be at least 3 characters long");
-      setIsLoading(false);
-      return;
-    }
-
-    const result = await register({
-      displayName: formData.displayName,
-      email: formData.email,
-      password: formData.password,
-    });
+    const result = await login(formData);
 
     if (result.success) {
       navigate("/home");
@@ -66,9 +41,9 @@ const Register = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Create Account
+            Welcome Back
           </h1>
-          <p className="text-gray-600">Join MoodSync today</p>
+          <p className="text-gray-600">Sign in to your MoodSync account</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8">
@@ -78,29 +53,6 @@ const Register = () => {
                 {error}
               </div>
             )}
-
-            <div>
-              <label
-                htmlFor="displayName"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Display Name
-              </label>
-              <input
-                id="displayName"
-                name="displayName"
-                type="text"
-                autoComplete="username"
-                required
-                value={formData.displayName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Choose a display name"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                Letters, numbers, and underscores only. 3-50 characters.
-              </p>
-            </div>
 
             <div>
               <label
@@ -133,32 +85,12 @@ const Register = () => {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 required
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Create a password"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                required
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Confirm your password"
+                placeholder="Enter your password"
               />
             </div>
 
@@ -167,18 +99,18 @@ const Register = () => {
               disabled={isLoading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoading ? "Creating Account..." : "Create Account"}
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <Link
-                to="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
+                to="/register"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Sign in here
+                Sign up here
               </Link>
             </p>
           </div>
@@ -188,4 +120,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default LoginPage;
