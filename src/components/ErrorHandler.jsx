@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
 
-const ErrorBoundary = () => {
+const ErrorHandler = () => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -15,8 +15,8 @@ const ErrorBoundary = () => {
     );
   }
 
-  // If user is authenticated, redirect to profile, otherwise to login
-  return <Navigate to={user ? "/profile" : "/login"} replace />;
+  // If user is authenticated, redirect to home, otherwise to login
+  return <Navigate to={user ? "/home" : "/login"} replace />;
 };
 
-export default ErrorBoundary;
+export default ErrorHandler;
