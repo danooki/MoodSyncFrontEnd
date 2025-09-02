@@ -4,8 +4,7 @@ import { useAuth } from "../hooks/useAuth.jsx";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    displayName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -41,15 +40,20 @@ const Register = () => {
       return;
     }
 
+    if (formData.displayName.length < 3) {
+      setError("Display name must be at least 3 characters long");
+      setIsLoading(false);
+      return;
+    }
+
     const result = await register({
-      firstName: formData.firstName,
-      lastName: formData.lastName,
+      displayName: formData.displayName,
       email: formData.email,
       password: formData.password,
     });
 
     if (result.success) {
-      navigate("/profile");
+      navigate("/home");
     } else {
       setError(result.message);
     }
@@ -75,46 +79,27 @@ const Register = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  First Name
-                </label>
-                <input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  autoComplete="given-name"
-                  required
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="First name"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Last Name
-                </label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  autoComplete="family-name"
-                  required
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="Last name"
-                />
-              </div>
+            <div>
+              <label
+                htmlFor="displayName"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Display Name
+              </label>
+              <input
+                id="displayName"
+                name="displayName"
+                type="text"
+                autoComplete="username"
+                required
+                value={formData.displayName}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Choose a display name"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Letters, numbers, and underscores only. 3-50 characters.
+              </p>
             </div>
 
             <div>

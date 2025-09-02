@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({
           email: userData.email,
           password: userData.password,
-          displayName: `${userData.firstName} ${userData.lastName}`,
+          displayName: userData.displayName,
         }),
       });
 
@@ -151,6 +151,7 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     updateProfile,
+    fetchUserProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
