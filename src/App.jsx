@@ -21,14 +21,14 @@ const App = () => {
           <Route path="/register" element={<Register />} />
         </Route>
 
-        {/* Protected routes */}
+        {/* Protected routes - all nested under ProtectedLayout */}
         <Route element={<ProtectedLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/find-your-mood" element={<FindYourMood />} />
           <Route path="/profile" element={<ProfileLayout />} />
         </Route>
 
-        {/* Catch-all route for invalid paths */}
+        {/* Catch-all route for invalid paths - smart redirect based on auth status */}
         <Route path="*" element={<ErrorHandler />} />
       </Route>
     </Routes>
