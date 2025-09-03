@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { BASE_URL } from "../config/api.js";
-import { AuthContext } from "./AuthContext.js";
+
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchUserProfile = async () => {
+    // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
+    // The backend will reject the request if the cookie is invalid
     try {
       setIsLoading(true);
       const response = await fetch(`${BASE_URL}/user/me`, {
@@ -39,6 +42,8 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is already logged in on app load
   useEffect(() => {
+    // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
+    // The backend will reject the request if the cookie is invalid
     fetchUserProfile();
   }, []);
 
@@ -61,9 +66,27 @@ export const AuthProvider = ({ children }) => {
         await fetchUserProfile();
         return { success: true, user: data };
       } else {
-        return { success: false, message: data.message || "Login failed" };
+        // Handle specific error cases based on status code
+        let errorMessage = "Login failed";
+        
+        if (response.status === 404) {
+          errorMessage = "Email does not exist";
+        } else if (response.status === 400) {
+          // Check if it's a validation error or password mismatch
+          if (data.error && data.error.includes(":")) {
+            // This is likely a validation error (e.g., "email: Invalid email address")
+            errorMessage = "Please check your email and password format";
+          } else {
+            errorMessage = "Password is not correct";
+          }
+        } else if (data.error) {
+          errorMessage = data.error;
+        }
+        
+        return { success: false, message: errorMessage };
       }
-    } catch {
+    } catch (error) {
+      console.error("Login error:", error);
       return { success: false, message: "Network error. Please try again." };
     }
   };

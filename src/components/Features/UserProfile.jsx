@@ -1,5 +1,16 @@
 import { useState } from "react";
-import { useAuth } from "../hooks/useAuth.jsx";
+import { useAuth } from "../../hooks/useAuth.jsx";
+import Card from "../UI/Card";
+import Button from "../UI/Button";
+import Input from "../UI/Input";
+import SectionHeader from "../UI/SectionHeader";
+import {
+  FormSection,
+  FormRow,
+  FormActions,
+  SuccessMessage,
+  ErrorMessage,
+} from "../UI/Form";
 
 const UserProfile = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -42,9 +53,11 @@ const UserProfile = ({ user }) => {
     setMessage("");
   };
 
+  const isSuccessMessage = message.includes("successfully");
+
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <Card className="overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-8 text-white">
           <div className="flex items-center space-x-4">
@@ -60,55 +73,45 @@ const UserProfile = ({ user }) => {
 
         {/* Profile Content */}
         <div className="p-6">
-          {message && (
-            <div
-              className={`mb-6 p-4 rounded-md text-sm ${
-                message.includes("successfully")
-                  ? "bg-green-50 border border-green-200 text-green-700"
-                  : "bg-red-50 border border-red-200 text-red-700"
-              }`}
-            >
-              {message}
-            </div>
-          )}
+          {message &&
+            (isSuccessMessage ? (
+              <SuccessMessage message={message} className="mb-6" />
+            ) : (
+              <ErrorMessage message={message} className="mb-6" />
+            ))}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Personal Information */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
-                Personal Information
-              </h2>
-
+            <FormSection title="Personal Information">
               {isEditing ? (
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={editForm.email}
-                      onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                  </div>
+                  <Input
+                    type="email"
+                    label="Email"
+                    name="email"
+                    value={editForm.email}
+                    onChange={handleEditChange}
+                    required
+                  />
 
-                  <div className="flex space-x-3 pt-4">
-                    <button
+                  <FormActions>
+                    <Button
                       onClick={handleSave}
+                      loading={isLoading}
                       disabled={isLoading}
-                      className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+                      variant="primary"
+                      className="flex-1"
                     >
-                      {isLoading ? "Saving..." : "Save Changes"}
-                    </button>
-                    <button
+                      Save Changes
+                    </Button>
+                    <Button
                       onClick={handleCancel}
-                      className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      variant="secondary"
+                      className="flex-1"
                     >
                       Cancel
-                    </button>
-                  </div>
+                    </Button>
+                  </FormActions>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -119,22 +122,15 @@ const UserProfile = ({ user }) => {
                     <p className="text-gray-900">{user.email}</p>
                   </div>
 
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-                  >
+                  <Button onClick={() => setIsEditing(true)} variant="primary">
                     Edit Profile
-                  </button>
+                  </Button>
                 </div>
               )}
-            </div>
+            </FormSection>
 
             {/* Circle Information */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
-                Circle Information
-              </h2>
-
+            <FormSection title="Circle Information">
               <div className="space-y-4">
                 {user.circle ? (
                   <>
@@ -197,14 +193,10 @@ const UserProfile = ({ user }) => {
                   </div>
                 )}
               </div>
-            </div>
+            </FormSection>
 
             {/* Account Information */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
-                Account Information
-              </h2>
-
+            <FormSection title="Account Information">
               <div className="space-y-4">
                 <div>
                   <span className="text-sm font-medium text-gray-500">
@@ -245,10 +237,10 @@ const UserProfile = ({ user }) => {
                   </p>
                 </div>
               </div>
-            </div>
+            </FormSection>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
