@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
+import { useLogout } from "../hooks/useLogout.js";
 import { BASE_URL } from "../config/api.js";
 import Navbar from "../components/Navigation/Navbar.jsx";
 import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
 import MatchMemberCard from "../components/Cards/MatchMemberCard.jsx";
-import { Button, Card } from "../components/UI";
+import { Button, Card, BackgroundWrapper } from "../components/UI";
 import {
   getApiErrorMessage,
   getNetworkErrorMessage,
 } from "../utils/errorUtils.js";
 
 const MatchPreviewPage = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const { handleLogout } = useLogout();
   const [matchPreview, setMatchPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -39,8 +41,7 @@ const MatchPreviewPage = () => {
       } else {
         const data = await response.json();
         if (response.status === 401) {
-          logout();
-          navigate("/login");
+          handleLogout();
           return;
         }
         setError(getApiErrorMessage(data, "Failed to fetch match preview"));
@@ -53,10 +54,6 @@ const MatchPreviewPage = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   const handleBackToTrackingBoard = () => {
     navigate("/tracking-board");
@@ -70,13 +67,13 @@ const MatchPreviewPage = () => {
     return (
       <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+        <BackgroundWrapper variant="padded">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center h-64">
               <LoadingSpinner />
             </div>
           </div>
-        </div>
+        </BackgroundWrapper>
       </>
     );
   }
@@ -85,7 +82,7 @@ const MatchPreviewPage = () => {
     return (
       <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+        <BackgroundWrapper variant="padded">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <Card className="text-center">
               <h2 className="text-2xl font-semibold text-red-600 mb-4">
@@ -102,7 +99,7 @@ const MatchPreviewPage = () => {
               </div>
             </Card>
           </div>
-        </div>
+        </BackgroundWrapper>
       </>
     );
   }
@@ -111,7 +108,7 @@ const MatchPreviewPage = () => {
     return (
       <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+        <BackgroundWrapper variant="padded">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <Card className="text-center">
               <h2 className="text-2xl font-semibold text-yellow-600 mb-4">
@@ -126,7 +123,7 @@ const MatchPreviewPage = () => {
               </Button>
             </Card>
           </div>
-        </div>
+        </BackgroundWrapper>
       </>
     );
   }
@@ -134,7 +131,7 @@ const MatchPreviewPage = () => {
   return (
     <>
       <Navbar onLogout={handleLogout} user={user} />
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+      <BackgroundWrapper variant="padded">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-12">
@@ -174,7 +171,7 @@ const MatchPreviewPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </BackgroundWrapper>
     </>
   );
 };

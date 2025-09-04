@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
-import { Button, Input, Card } from "../components/UI";
+import { Button, Input, Card, ErrorMessage } from "../components/UI";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +16,11 @@ const LoginPage = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    // Clear error when user starts typing
+    if (error) {
+      setError("");
+    }
   };
 
   const navigate = useNavigate();
@@ -49,11 +54,7 @@ const LoginPage = () => {
 
         <Card className="p-6 sm:p-8">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-red-600 text-sm">{error}</p>
-              </div>
-            )}
+            {error && <ErrorMessage message={error} />}
             <Input
               id="email"
               name="email"

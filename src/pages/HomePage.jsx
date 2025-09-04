@@ -1,20 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { useCircleManagement } from "../hooks/useCircleManagement.js";
-import { useInvitationManagement } from "../hooks/useInvitationManagement.js";
 import { useDailyScore } from "../hooks/useDailyScore.js";
+import { useLogout } from "../hooks/useLogout.js";
+import { BASE_URL } from "../config/api.js";
+import {
+  getApiErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 import Navbar from "../components/Navigation/Navbar.jsx";
 import CircleStatusCard from "../components/Cards/CircleStatusCard.jsx";
 import CircleInvitations from "../components/Features/CircleInvitations.jsx";
-
 import InviteFriendModal from "../components/Modals/InviteFriendModal.jsx";
+import { BackgroundWrapper } from "../components/UI";
 
 const HomePage = () => {
-  const { user, fetchUserProfile, logout } = useAuth();
+  const { user, fetchUserProfile } = useAuth();
   const navigate = useNavigate();
+  const { handleLogout } = useLogout();
 
-  // Custom hooks for different concerns
+  // Circle management hook
   const {
     circleName,
     setCircleName,
@@ -27,27 +33,7 @@ const HomePage = () => {
     handleCreateCircle,
   } = useCircleManagement();
 
-  // Invitation block: InviteFriendmodal.jsx and CircleInvitations.jsx
-  const {
-    showInviteModal,
-    inviteDisplayName,
-    setInviteDisplayName,
-    isInviting,
-    inviteSuccess,
-    circleInvitations,
-    isLoadingInvitations,
-    handleInviteFriend,
-    handleAcceptInvite,
-    handleDeclineInvite,
-    handleInviteFriendClick,
-    handleCloseInviteModal,
-    fetchCircleInvitationsData,
-  } = useInvitationManagement(
-    circleStatus,
-    checkCircleStatus,
-    fetchUserProfile
-  );
-
+  // Daily score hook
   const {
     dailyScore,
     isLoadingDailyScore,
@@ -55,6 +41,125 @@ const HomePage = () => {
     hasAnsweredAllQuestions,
     dailyScoreDate,
   } = useDailyScore();
+
+  // Simple invite modal state
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteDisplayName, setInviteDisplayName] = useState("");
+  const [isInviting, setIsInviting] = useState(false);
+  const [inviteError, setInviteError] = useState("");
+
+  // Simple invitations state
+  const [circleInvitations, setCircleInvitations] = useState([]);
+  const [isLoadingInvitations, setIsLoadingInvitations] = useState(false);
+
+  // Simple function to fetch invitations
+  const fetchCircleInvitationsData = async () => {
+    setIsLoadingInvitations(true);
+    try {
+      const response = await fetch(`${BASE_URL}/circle/invites`, {
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCircleInvitations(data || []);
+      } else if (response.status === 401) {
+        logout();
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error fetching invitations:", error);
+    } finally {
+      setIsLoadingInvitations(false);
+    }
+  };
+
+  // Simple function to handle invite friend
+  const handleInviteFriend = async (e) => {
+    e.preventDefault();
+    if (!inviteDisplayName.trim()) {
+      setInviteError("Display name is required");
+      return;
+    }
+
+    setIsInviting(true);
+    setInviteError("");
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/circle/${circleStatus.circleId}/invite`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ displayName: inviteDisplayName.trim() }),
+        }
+      );
+
+      if (response.ok) {
+        setInviteDisplayName("");
+        setShowInviteModal(false);
+      } else {
+        const data = await response.json();
+        setInviteError(getApiErrorMessage(data, "Failed to send invitation"));
+      }
+    } catch (error) {
+      setInviteError(getNetworkErrorMessage());
+    } finally {
+      setIsInviting(false);
+    }
+  };
+
+  // Simple function to accept invitation
+  const handleAcceptInvite = async (inviteId) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/circle/invite/${inviteId}/accept`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.ok) {
+        await checkCircleStatus();
+        await fetchCircleInvitationsData();
+        await fetchUserProfile();
+      }
+    } catch (error) {
+      console.error("Error accepting invitation:", error);
+    }
+  };
+
+  // Simple function to decline invitation
+  const handleDeclineInvite = async (inviteId) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/circle/invite/${inviteId}/decline`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.ok) {
+        await fetchCircleInvitationsData();
+      }
+    } catch (error) {
+      console.error("Error declining invitation:", error);
+    }
+  };
+
+  // Simple modal handlers
+  const handleInviteFriendClick = () => setShowInviteModal(true);
+  const handleCloseInviteModal = () => {
+    setShowInviteModal(false);
+    setInviteError("");
+    setInviteDisplayName("");
+  };
 
   // Load data on component mount
   useEffect(() => {
@@ -74,15 +179,11 @@ const HomePage = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   return (
     <>
       <Navbar onLogout={handleLogout} user={user} />
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+      <BackgroundWrapper variant="padded">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Welcome Header */}
           <div className="text-center mb-12">
@@ -119,7 +220,7 @@ const HomePage = () => {
             onDecline={handleDeclineInvite}
           />
         </div>
-      </div>
+      </BackgroundWrapper>
 
       {/* Invite Friend Modal */}
       <InviteFriendModal
@@ -128,7 +229,7 @@ const HomePage = () => {
         onSubmit={handleInviteFriend}
         displayName={inviteDisplayName}
         setDisplayName={setInviteDisplayName}
-        success={inviteSuccess}
+        error={inviteError}
         isInviting={isInviting}
       />
     </>

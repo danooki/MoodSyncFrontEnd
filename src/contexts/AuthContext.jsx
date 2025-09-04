@@ -96,8 +96,7 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         // Backend returns user data
-        // After registration, fetch the complete user profile including circle data
-        await fetchUserProfile();
+        // Don't fetch user profile immediately to allow success message to show
         return { success: true, user: data };
       } else {
         return {

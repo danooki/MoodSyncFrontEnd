@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
+import { useLogout } from "../hooks/useLogout.js";
 import { BASE_URL } from "../config/api.js";
+// components
 import Navbar from "../components/Navigation/Navbar.jsx";
 import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
-import { Button, Card } from "../components/UI";
+import { Button, Card, BackgroundWrapper } from "../components/UI";
+import Avatar from "../components/UI/Avatar.jsx";
 import {
   getApiErrorMessage,
   getNetworkErrorMessage,
 } from "../utils/errorUtils.js";
 
 const TrackingBoardPage = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const { handleLogout } = useLogout();
   const [trackingBoard, setTrackingBoard] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -50,8 +54,7 @@ const TrackingBoardPage = () => {
       } else {
         const errorData = await response.json();
         if (response.status === 401) {
-          logout();
-          navigate("/login");
+          handleLogout();
           return;
         }
         setError(
@@ -67,11 +70,6 @@ const TrackingBoardPage = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
   };
 
   const handleBackToHome = () => {
@@ -108,13 +106,13 @@ const TrackingBoardPage = () => {
     return (
       <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+        <BackgroundWrapper variant="padded">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center h-64">
               <LoadingSpinner />
             </div>
           </div>
-        </div>
+        </BackgroundWrapper>
       </>
     );
   }
@@ -123,7 +121,7 @@ const TrackingBoardPage = () => {
     return (
       <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+        <BackgroundWrapper variant="padded">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <Card className="text-center">
               <h2 className="text-2xl font-semibold text-red-600 mb-4">
@@ -140,7 +138,7 @@ const TrackingBoardPage = () => {
               </div>
             </Card>
           </div>
-        </div>
+        </BackgroundWrapper>
       </>
     );
   }
@@ -148,7 +146,7 @@ const TrackingBoardPage = () => {
   return (
     <>
       <Navbar onLogout={handleLogout} user={user} />
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+      <BackgroundWrapper variant="padded">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-12">
@@ -194,19 +192,12 @@ const TrackingBoardPage = () => {
                     className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
                   >
                     <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                        {member.avatar ? (
-                          <img
-                            src={member.avatar}
-                            alt={member.displayName}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                        ) : (
-                          <span className="text-indigo-600 font-semibold">
-                            {member.displayName.charAt(0).toUpperCase()}
-                          </span>
-                        )}
-                      </div>
+                      <Avatar
+                        src={member.avatar}
+                        alt={member.displayName}
+                        displayName={member.displayName}
+                        size="md"
+                      />
                       <div>
                         <h3 className="font-medium text-gray-900">
                           {member.displayName}
@@ -252,7 +243,7 @@ const TrackingBoardPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </BackgroundWrapper>
     </>
   );
 };

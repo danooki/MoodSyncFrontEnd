@@ -4,22 +4,7 @@ import Card from "../UI/Card";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import SectionHeader from "../UI/SectionHeader";
-// Simple inline form components
-const SuccessMessage = ({ message, className = "" }) => (
-  <div
-    className={`bg-green-50 border border-green-200 rounded-lg p-3 ${className}`}
-  >
-    <p className="text-green-600 text-sm">{message}</p>
-  </div>
-);
-
-const ErrorMessage = ({ message, className = "" }) => (
-  <div
-    className={`bg-red-50 border border-red-200 rounded-lg p-3 ${className}`}
-  >
-    <p className="text-red-600 text-sm">{message}</p>
-  </div>
-);
+import { SuccessMessage, ErrorMessage } from "../UI";
 
 const UserProfile = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);

@@ -20,7 +20,6 @@ const AnswerOption = ({ option, index, isSubmitting, onAnswerSubmit }) => {
         </div>
         <div>
           <div className="font-medium text-gray-900">{option.label}</div>
-          <div className="text-sm text-gray-600 mt-1">{option.description}</div>
         </div>
       </div>
     </Button>

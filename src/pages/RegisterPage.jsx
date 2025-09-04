@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
-import { Button, Input, Card } from "../components/UI";
-
-// Simple inline error message component
-const ErrorMessage = ({ message, className = "" }) => (
-  <div
-    className={`bg-red-50 border border-red-200 rounded-lg p-3 ${className}`}
-  >
-    <p className="text-red-600 text-sm">{message}</p>
-  </div>
-);
+import {
+  Button,
+  Input,
+  Card,
+  ErrorMessage,
+  SuccessMessage,
+  LoadingSpinner,
+} from "../components/UI";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -21,21 +19,28 @@ const RegisterPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    // Clear error when user starts typing
+    if (error) {
+      setError("");
+    }
   };
 
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, fetchUserProfile } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setSuccess(false);
 
     // Basic validation
     if (formData.password !== formData.confirmPassword) {
@@ -63,7 +68,12 @@ const RegisterPage = () => {
     });
 
     if (result.success) {
-      navigate("/home");
+      setSuccess(true);
+      // Show success message for 3 seconds, then fetch user profile and navigate
+      setTimeout(async () => {
+        await fetchUserProfile();
+        navigate("/home");
+      }, 3000);
     } else {
       setError(result.message);
     }
@@ -82,84 +92,93 @@ const RegisterPage = () => {
         </div>
 
         <Card className="p-6 sm:p-8">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && <ErrorMessage message={error} />}
+          {success ? (
+            <div className="text-center space-y-4">
+              <SuccessMessage message="Account created successfully! Redirecting to home..." />
+              <LoadingSpinner size="md" text="" className="mx-auto" />
+            </div>
+          ) : (
+            <>
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {error && <ErrorMessage message={error} />}
 
-            <Input
-              id="displayName"
-              name="displayName"
-              type="text"
-              label="Display Name"
-              autoComplete="username"
-              required
-              value={formData.displayName}
-              onChange={handleChange}
-              placeholder="Choose a display name"
-            />
-            <p className="mt-1 text-xs text-gray-500">
-              This will be your public name in the app
-            </p>
+                <Input
+                  id="displayName"
+                  name="displayName"
+                  type="text"
+                  label="Display Name"
+                  autoComplete="username"
+                  required
+                  value={formData.displayName}
+                  onChange={handleChange}
+                  placeholder="Choose a display name"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  This will be your public name in the app
+                </p>
 
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              label="Email Address"
-              autoComplete="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="Email Address"
+                  autoComplete="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                />
 
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              label="Password"
-              autoComplete="new-password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Create a password"
-            />
-            <p className="mt-1 text-xs text-gray-500">
-              Must be at least 6 characters long
-            </p>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  label="Password"
+                  autoComplete="new-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Create a password"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Must be at least 6 characters long
+                </p>
 
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              label="Confirm Password"
-              autoComplete="new-password"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-            />
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  label="Confirm Password"
+                  autoComplete="new-password"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                />
 
-            <Button
-              type="submit"
-              loading={isLoading}
-              disabled={isLoading}
-              fullWidth
-            >
-              {isLoading ? "Creating account..." : "Create Account"}
-            </Button>
-          </form>
+                <Button
+                  type="submit"
+                  loading={isLoading}
+                  disabled={isLoading}
+                  fullWidth
+                >
+                  {isLoading ? "Creating account..." : "Create Account"}
+                </Button>
+              </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Sign in here
-              </Link>
-            </p>
-          </div>
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    Sign in here
+                  </Link>
+                </p>
+              </div>
+            </>
+          )}
         </Card>
       </div>
     </div>

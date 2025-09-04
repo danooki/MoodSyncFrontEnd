@@ -2,14 +2,7 @@ import React from "react";
 import Modal from "../UI/Modal";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
-// Simple inline message component
-const SuccessMessage = ({ message, className = "" }) => (
-  <div
-    className={`bg-green-50 border border-green-200 rounded-lg p-3 ${className}`}
-  >
-    <p className="text-green-600 text-sm">{message}</p>
-  </div>
-);
+import { SuccessMessage } from "../UI";
 
 const InviteFriendModal = ({
   isOpen,

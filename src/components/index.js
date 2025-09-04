@@ -4,6 +4,7 @@ export { default as Input } from "./UI/Input.jsx";
 export { default as Card } from "./UI/Card.jsx";
 export { default as Modal } from "./UI/Modal.jsx";
 export { default as SectionHeader } from "./UI/SectionHeader.jsx";
+export { default as BackgroundWrapper } from "./UI/BackgroundWrapper.jsx";
 // Form component removed - using simple inline components instead
 export { CircleIcon, PlusIcon } from "./UI/Icons.jsx";
 export { default as LoadingSpinner } from "./UI/LoadingSpinner.jsx";
@@ -18,9 +19,6 @@ export { default as MatchMemberCard } from "./Cards/MatchMemberCard.jsx";
 
 // Modal Components
 export { default as InviteFriendModal } from "./Modals/InviteFriendModal.jsx";
-export { default as ConfirmationModal } from "./Modals/ConfirmationModal.jsx";
-export { default as EditProfileModal } from "./Modals/EditProfileModal.jsx";
-export { default as ChangePasswordModal } from "./Modals/ChangePasswordModal.jsx";
 
 // Navigation Components
 export { default as Navbar } from "./Navigation/Navbar.jsx";

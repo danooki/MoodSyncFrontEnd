@@ -3,7 +3,7 @@ import { BASE_URL } from "../config/api.js";
 
 const useQuestionProgress = () => {
   const [progress, setProgress] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(4);
+  const [totalQuestions, setTotalQuestions] = useState(4); // Max 4 questions per day.
 
   const updateProgress = async () => {
     try {

@@ -1,40 +1,53 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+// hooks
 import { useAuth } from "../hooks/useAuth.jsx";
-import useQuestionFlow from "../hooks/useQuestionFlow.js";
+import { useLogout } from "../hooks/useLogout.js";
+import useQuestionData from "../hooks/useQuestionData.js";
+import useAnswerSubmission from "../hooks/useAnswerSubmission.js";
+import useQuestionStatus from "../hooks/useQuestionStatus.js";
 import useQuestionProgress from "../hooks/useQuestionProgress.js";
+// Components
 import Navbar from "../components/Navigation/Navbar.jsx";
 import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
 import ProgressBar from "../components/Features/ProgressBar.jsx";
 import QuestionCard from "../components/Cards/QuestionCard.jsx";
-import { Button, Card } from "../components/UI";
+import { Button, Card, BackgroundWrapper } from "../components/UI";
 
 const QuestionInterfacePage = () => {
   const { user, isLoading: authLoading } = useAuth();
-  const {
-    currentQuestion,
-    isLoading,
-    isSubmitting,
-    handleLogout,
-    initializeQuestionFlow,
-    handleAnswerSubmit,
-  } = useQuestionFlow();
+  const navigate = useNavigate();
+  const { handleLogout } = useLogout();
+
+  // Use individual hooks directly - much simpler and clearer
+  const { currentQuestion, isLoading, error, fetchNextQuestion } =
+    useQuestionData();
+  const { isSubmitting, submitAnswer } = useAnswerSubmission();
+  const { checkIfAllQuestionsAnswered } = useQuestionStatus();
   const { progress, totalQuestions, updateProgress } = useQuestionProgress();
 
   useEffect(() => {
-    // Initialize question flow when user is available
+    // Start question flow when user is available
     if (user) {
-      initializeQuestionFlow(totalQuestions);
+      // Check if all questions are already answered
+      checkIfAllQuestionsAnswered(totalQuestions).then((allAnswered) => {
+        if (allAnswered) {
+          // All questions answered, go to tracking board
+          navigate("/tracking-board");
+        } else {
+          // Not all answered, fetch the next question
+          fetchNextQuestion();
+        }
+      });
     }
   }, [user, totalQuestions]);
 
   // Show loading spinner while auth is loading
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="flex items-center justify-center min-h-screen">
-          <LoadingSpinner />
-        </div>
-      </div>
+      <BackgroundWrapper variant="centered">
+        <LoadingSpinner />
+      </BackgroundWrapper>
     );
   }
 
@@ -45,20 +58,20 @@ const QuestionInterfacePage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="flex items-center justify-center min-h-screen">
+        <BackgroundWrapper variant="centered">
           <LoadingSpinner />
-        </div>
-      </div>
+        </BackgroundWrapper>
+      </>
     );
   }
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="flex items-center justify-center min-h-screen">
+        <BackgroundWrapper variant="centered">
           <div className="text-center">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
               No Questions Available
@@ -67,8 +80,8 @@ const QuestionInterfacePage = () => {
               All questions have been answered for today.
             </p>
           </div>
-        </div>
-      </div>
+        </BackgroundWrapper>
+      </>
     );
   }
 
@@ -80,9 +93,9 @@ const QuestionInterfacePage = () => {
   ) {
     console.error("QuestionInterfacePage - Invalid question structure");
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <>
         <Navbar onLogout={handleLogout} user={user} />
-        <div className="flex items-center justify-center min-h-screen">
+        <BackgroundWrapper variant="centered">
           <Card className="text-center">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
               Question Data Error
@@ -99,34 +112,56 @@ const QuestionInterfacePage = () => {
               Refresh Page
             </Button>
           </Card>
-        </div>
-      </div>
+        </BackgroundWrapper>
+      </>
     );
   }
 
-  const handleAnswerSubmitWrapper = async (answer) => {
-    const result = await handleAnswerSubmit(answer, totalQuestions);
+  // this functions submits answer, update progress and fetch next question
+  const handleAnswerSubmit = async (answer) => {
+    // uses question id to submit answer
+    const result = await submitAnswer(currentQuestion.id, answer);
     if (result.success) {
       // Update progress after successful answer submission
       await updateProgress();
+      // Get updated progress info to check if limit reached
+      const progressInfo = await updateProgress();
+
+      // Check if user has answered 4 questions
+      if (progressInfo.answeredCount >= 4) {
+        // All 4 questions answered, go to tracking board
+        navigate("/tracking-board");
+        return;
+      }
+
+      // only under 4 questions answered, fetch next question
+      const nextResult = await fetchNextQuestion();
+      if (nextResult.success) {
+        // Question loaded successfully, continue with next question
+      } else if (nextResult.done) {
+        // All questions answered, go to tracking board
+        navigate("/tracking-board");
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <>
       <Navbar onLogout={handleLogout} user={user} />
-      <div className="container mx-auto px-4 py-8">
-        {/* Progress Bar */}
-        <ProgressBar progress={progress} totalQuestions={totalQuestions} />
+      <BackgroundWrapper>
+        <div className="container mx-auto px-4 py-8">
+          {/* Progress Bar */}
+          <ProgressBar progress={progress} totalQuestions={totalQuestions} />
 
-        {/* Question Card */}
-        <QuestionCard
-          question={currentQuestion}
-          isSubmitting={isSubmitting}
-          onAnswerSubmit={handleAnswerSubmitWrapper}
-        />
-      </div>
-    </div>
+          {/* Question Card */}
+          <QuestionCard
+            question={currentQuestion}
+            isSubmitting={isSubmitting}
+            onAnswerSubmit={handleAnswerSubmit}
+          />
+        </div>
+      </BackgroundWrapper>
+    </>
   );
 };
 

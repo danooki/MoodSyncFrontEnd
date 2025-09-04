@@ -3,25 +3,19 @@ import {
   getTraitName,
   getTraitDescription,
 } from "../../utils/discUtils";
+import Avatar from "../UI/Avatar";
 
 const MatchMemberCard = ({ member, isSinglePersonCircle }) => {
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8">
       {/* Member Header */}
       <div className="flex items-center space-x-4 mb-6">
-        <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
-          {member.avatar ? (
-            <img
-              src={member.avatar}
-              alt={member.displayName}
-              className="w-16 h-16 rounded-full object-cover"
-            />
-          ) : (
-            <span className="text-indigo-600 font-bold text-2xl">
-              {member.displayName.charAt(0).toUpperCase()}
-            </span>
-          )}
-        </div>
+        <Avatar
+          src={member.avatar}
+          alt={member.displayName}
+          displayName={member.displayName}
+          size="lg"
+        />
         <div>
           <h2 className="text-2xl font-bold text-gray-900">
             {member.displayName}
