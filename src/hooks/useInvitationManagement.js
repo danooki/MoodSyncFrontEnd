@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
+import { getApiErrorMessage, getNetworkErrorMessage } from "../utils/errorUtils.js";
 
 export const useInvitationManagement = (
   circleStatus,
@@ -51,14 +52,14 @@ export const useInvitationManagement = (
 
         // Set empty array on error to avoid showing loading state indefinitely
         setCircleInvitations([]);
-        setInvitationsError(data.message || "Failed to load invitations");
+        setInvitationsError(getApiErrorMessage(data, "Failed to load invitations"));
       }
     } catch (error) {
       console.error("Error fetching circle invitations:", error);
 
       // Set empty array on error to avoid showing loading state indefinitely
       setCircleInvitations([]);
-      setInvitationsError("Network error. Please try again.");
+      setInvitationsError(getNetworkErrorMessage());
     } finally {
       setIsLoadingInvitations(false);
     }
@@ -109,12 +110,12 @@ export const useInvitationManagement = (
             "You don't have permission to invite users to this circle."
           );
         } else {
-          setInviteError(data.message || "Failed to send invitation");
+          setInviteError(getApiErrorMessage(data, "Failed to send invitation"));
         }
       }
     } catch (err) {
       console.error("Invitation error:", err);
-      setInviteError("Network error. Please try again.");
+      setInviteError(getNetworkErrorMessage());
     } finally {
       setIsInviting(false);
     }
@@ -142,11 +143,11 @@ export const useInvitationManagement = (
       } else {
         const data = await response.json();
         console.error("Accept invitation error:", data.message);
-        setInvitationsError(data.message || "Failed to accept invitation");
+        setInvitationsError(getApiErrorMessage(data, "Failed to accept invitation"));
       }
     } catch (error) {
       console.error("Error accepting invitation:", error);
-      setInvitationsError("Network error. Please try again.");
+      setInvitationsError(getNetworkErrorMessage());
     }
   };
 
@@ -170,11 +171,11 @@ export const useInvitationManagement = (
       } else {
         const data = await response.json();
         console.error("Decline invitation error:", data.message);
-        setInvitationsError(data.message || "Failed to decline invitation");
+        setInvitationsError(getApiErrorMessage(data, "Failed to decline invitation"));
       }
     } catch (error) {
       console.error("Error declining invitation:", error);
-      setInvitationsError("Network error. Please try again.");
+      setInvitationsError(getNetworkErrorMessage());
     }
   };
 

@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
+import {
+  getApiErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 
 export const useDailyScore = () => {
   const { logout } = useAuth();
@@ -35,11 +39,11 @@ export const useDailyScore = () => {
           return;
         }
 
-        setError(data.message || "Failed to load daily score");
+        setError(getApiErrorMessage(data, "Failed to load daily score"));
       }
     } catch (error) {
       console.error("Error checking daily score:", error);
-      setError("Network error. Please try again.");
+      setError(getNetworkErrorMessage());
     } finally {
       setIsLoadingDailyScore(false);
     }

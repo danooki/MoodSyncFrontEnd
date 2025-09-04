@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "../UI/Modal";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
+import { getErrorMessage } from "../../utils/errorUtils.js";
 // Simple inline message components
 const SuccessMessage = ({ message, className = "" }) => (
   <div
@@ -30,35 +31,33 @@ const EditProfileModal = ({
     displayName: user?.displayName || "",
     email: user?.email || "",
   });
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear field-specific error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
+    // Clear error when user starts typing
+    if (error) {
+      setError("");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
+    setError("");
     setSuccess("");
 
     // Basic validation
-    const newErrors = {};
     if (!formData.displayName.trim()) {
-      newErrors.displayName = "Display name is required";
+      setError("Display name is required");
+      return;
     }
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
+      setError("Email is required");
+      return;
     }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setError("Please enter a valid email");
       return;
     }
 
@@ -69,7 +68,7 @@ const EditProfileModal = ({
         onClose();
       }, 1500);
     } catch (error) {
-      setErrors({ general: error.message || "Failed to update profile" });
+      setError(getErrorMessage(error, "Failed to update profile"));
     }
   };
 
@@ -78,7 +77,7 @@ const EditProfileModal = ({
       displayName: user?.displayName || "",
       email: user?.email || "",
     });
-    setErrors({});
+    setError("");
     setSuccess("");
     onClose();
   };
@@ -93,7 +92,7 @@ const EditProfileModal = ({
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         {success && <SuccessMessage message={success} />}
-        {errors.general && <ErrorMessage message={errors.general} />}
+        {error && <ErrorMessage message={error} />}
 
         <div className="space-y-4">
           <Input
@@ -101,7 +100,6 @@ const EditProfileModal = ({
             type="text"
             value={formData.displayName}
             onChange={(e) => handleInputChange("displayName", e.target.value)}
-            error={errors.displayName}
             placeholder="Enter your display name"
             disabled={isLoading}
             required
@@ -112,7 +110,6 @@ const EditProfileModal = ({
             type="email"
             value={formData.email}
             onChange={(e) => handleInputChange("email", e.target.value)}
-            error={errors.email}
             placeholder="Enter your email"
             disabled={isLoading}
             required

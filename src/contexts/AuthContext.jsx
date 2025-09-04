@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
 import { BASE_URL } from "../config/api.js";
+import { getLoginErrorMessage, getRegistrationErrorMessage, getNetworkErrorMessage } from "../utils/errorUtils.js";
 
 export const AuthContext = createContext();
 
@@ -66,28 +67,13 @@ export const AuthProvider = ({ children }) => {
         await fetchUserProfile();
         return { success: true, user: data };
       } else {
-        // Handle specific error cases based on status code
-        let errorMessage = "Login failed";
-
-        if (response.status === 404) {
-          errorMessage = "Email does not exist";
-        } else if (response.status === 400) {
-          // Check if it's a validation error or password mismatch
-          if (data.error && data.error.includes(":")) {
-            // This is likely a validation error (e.g., "email: Invalid email address")
-            errorMessage = "Please check your email and password format";
-          } else {
-            errorMessage = "Password is not correct";
-          }
-        } else if (data.error) {
-          errorMessage = data.error;
-        }
-
+        // Use simplified error handling
+        const errorMessage = getLoginErrorMessage(response, data);
         return { success: false, message: errorMessage };
       }
     } catch (error) {
       console.error("Login error:", error);
-      return { success: false, message: "Network error. Please try again." };
+      return { success: false, message: getNetworkErrorMessage() };
     }
   };
 
@@ -116,11 +102,11 @@ export const AuthProvider = ({ children }) => {
       } else {
         return {
           success: false,
-          message: data.message || "Registration failed",
+          message: getRegistrationErrorMessage(data),
         };
       }
     } catch {
-      return { success: false, message: "Network error. Please try again." };
+      return { success: false, message: getNetworkErrorMessage() };
     }
   };
 
@@ -163,7 +149,7 @@ export const AuthProvider = ({ children }) => {
         };
       }
     } catch {
-      return { success: false, message: "Network error. Please try again." };
+      return { success: false, message: getNetworkErrorMessage() };
     }
   };
 

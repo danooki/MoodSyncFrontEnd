@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
+import {
+  getApiErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 
 const useQuestionFlow = () => {
   const { user, logout } = useAuth();
@@ -90,12 +94,12 @@ const useQuestionFlow = () => {
           return { success: false, error: "unauthorized" };
         }
 
-        setError(data.message || "Failed to fetch question");
+        setError(getApiErrorMessage(data, "Failed to fetch question"));
         return { success: false, error: data.message };
       }
     } catch (error) {
       console.error("Error fetching question:", error);
-      setError("Network error. Please try again.");
+      setError(getNetworkErrorMessage());
       return { success: false, error: error.message };
     } finally {
       setIsLoading(false);
@@ -133,12 +137,12 @@ const useQuestionFlow = () => {
           return { success: false, error: "unauthorized" };
         }
 
-        setError(data.message || "Failed to submit answer");
+        setError(getApiErrorMessage(data, "Failed to submit answer"));
         return { success: false, error: data.message };
       }
     } catch (error) {
       console.error("Error submitting answer:", error);
-      setError("Network error. Please try again.");
+      setError(getNetworkErrorMessage());
       return { success: false, error: error.message };
     } finally {
       setIsSubmitting(false);

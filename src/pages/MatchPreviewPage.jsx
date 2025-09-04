@@ -6,6 +6,10 @@ import Navbar from "../components/Navigation/Navbar.jsx";
 import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
 import MatchMemberCard from "../components/Cards/MatchMemberCard.jsx";
 import { Button, Card } from "../components/UI";
+import {
+  getApiErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 
 const MatchPreviewPage = () => {
   const { user, logout } = useAuth();
@@ -39,11 +43,11 @@ const MatchPreviewPage = () => {
           navigate("/login");
           return;
         }
-        setError(data.message || "Failed to fetch match preview");
+        setError(getApiErrorMessage(data, "Failed to fetch match preview"));
       }
     } catch (error) {
       console.error("Error fetching match preview:", error);
-      setError("Network error. Please try again.");
+      setError(getNetworkErrorMessage());
     } finally {
       setIsLoading(false);
     }

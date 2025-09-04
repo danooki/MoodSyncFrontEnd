@@ -5,6 +5,10 @@ import { BASE_URL } from "../config/api.js";
 import Navbar from "../components/Navigation/Navbar.jsx";
 import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
 import { Button, Card } from "../components/UI";
+import {
+  getApiErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 
 const TrackingBoardPage = () => {
   const { user, logout } = useAuth();
@@ -51,13 +55,15 @@ const TrackingBoardPage = () => {
           return;
         }
         setError(
-          errorData.message ||
+          getApiErrorMessage(
+            errorData,
             `Failed to fetch tracking board (${response.status})`
+          )
         );
       }
     } catch (error) {
       console.error("Error fetching tracking board:", error);
-      setError("Network error. Please try again.");
+      setError(getNetworkErrorMessage());
     } finally {
       setIsLoading(false);
     }

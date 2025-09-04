@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
+import { getApiErrorMessage, getNetworkErrorMessage } from "../utils/errorUtils.js";
 
 export const useCircleManagement = () => {
   const { logout, fetchUserProfile } = useAuth();
@@ -43,7 +44,7 @@ export const useCircleManagement = () => {
         }
 
         setCircleStatus(null);
-        setCircleError(data.message || "Failed to load circle status");
+        setCircleError(getApiErrorMessage(data, "Failed to load circle status"));
       }
     } catch (error) {
       console.error("Error checking circle status:", error);
@@ -53,7 +54,7 @@ export const useCircleManagement = () => {
           "Network error: Unable to connect to server. Please check your internet connection."
         );
       } else {
-        setCircleError("Failed to load circle status. Please try again.");
+        setCircleError(getNetworkErrorMessage());
       }
 
       setCircleStatus(null);
@@ -91,10 +92,10 @@ export const useCircleManagement = () => {
         setIsCreatingCircle(false);
       } else {
         const data = await response.json();
-        setError(data.message || "Failed to create circle");
+        setError(getApiErrorMessage(data, "Failed to create circle"));
       }
     } catch (err) {
-      setError("Network error. Please try again.");
+      setError(getNetworkErrorMessage());
     } finally {
       setIsCreatingCircle(false);
     }
