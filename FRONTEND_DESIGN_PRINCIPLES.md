@@ -61,7 +61,7 @@ const fetchData = async () => {
 };
 ```
 
-### **Form Handling**
+### **Form Handling** (onSubmit / onClick)
 
 ```jsx
 const handleSubmit = async (e) => {
@@ -90,7 +90,7 @@ const handleSubmit = async (e) => {
 ## What to Use
 
 - Basic `useState` and `useEffect`
-- Simple form handling
+- Simple form handling (onSubmit for forms, onClick for buttons)
 - Basic and centralized error handling
 - Simple API calls with `fetch`
 - Basic conditional rendering

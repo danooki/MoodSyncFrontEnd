@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
-import { useLogout } from "../hooks/useLogout.js";
 import { BASE_URL } from "../config/api.js";
-import Navbar from "../components/Navigation/Navbar.jsx";
-import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
 import MatchMemberCard from "../components/Cards/MatchMemberCard.jsx";
-import { Button, Card, BackgroundWrapper } from "../components/UI";
+import {
+  Button,
+  Card,
+  PageHeader,
+  LoadingPage,
+  ErrorPage,
+} from "../components/UI";
 import {
   getApiErrorMessage,
   getNetworkErrorMessage,
@@ -15,7 +18,6 @@ import {
 const MatchPreviewPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { handleLogout } = useLogout();
   const [matchPreview, setMatchPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -41,7 +43,7 @@ const MatchPreviewPage = () => {
       } else {
         const data = await response.json();
         if (response.status === 401) {
-          handleLogout();
+          navigate("/login");
           return;
         }
         setError(getApiErrorMessage(data, "Failed to fetch match preview"));
@@ -54,7 +56,6 @@ const MatchPreviewPage = () => {
     }
   };
 
-
   const handleBackToTrackingBoard = () => {
     navigate("/tracking-board");
   };
@@ -64,114 +65,71 @@ const MatchPreviewPage = () => {
   };
 
   if (isLoading) {
-    return (
-      <>
-        <Navbar onLogout={handleLogout} user={user} />
-        <BackgroundWrapper variant="padded">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-center items-center h-64">
-              <LoadingSpinner />
-            </div>
-          </div>
-        </BackgroundWrapper>
-      </>
-    );
+    return <LoadingPage text="Loading match preview..." />;
   }
 
   if (error) {
     return (
-      <>
-        <Navbar onLogout={handleLogout} user={user} />
-        <BackgroundWrapper variant="padded">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="text-center">
-              <h2 className="text-2xl font-semibold text-red-600 mb-4">
-                Error
-              </h2>
-              <p className="text-gray-600 mb-6">{error}</p>
-              <div className="space-x-4">
-                <Button onClick={fetchMatchPreview} variant="primary">
-                  Try Again
-                </Button>
-                <Button onClick={handleBackToTrackingBoard} variant="secondary">
-                  Back to Tracking Board
-                </Button>
-              </div>
-            </Card>
-          </div>
-        </BackgroundWrapper>
-      </>
+      <ErrorPage
+        error={error}
+        onRetry={fetchMatchPreview}
+        onBack={handleBackToTrackingBoard}
+        backText="Back to Tracking Board"
+      />
     );
   }
 
   if (!matchPreview || !matchPreview.allCompleted) {
     return (
-      <>
-        <Navbar onLogout={handleLogout} user={user} />
-        <BackgroundWrapper variant="padded">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="text-center">
-              <h2 className="text-2xl font-semibold text-yellow-600 mb-4">
-                Not Ready Yet
-              </h2>
-              <p className="text-gray-600 mb-6">
-                All circle members need to complete their daily questions before
-                viewing the match preview.
-              </p>
-              <Button onClick={handleBackToTrackingBoard} variant="primary">
-                Back to Tracking Board
-              </Button>
-            </Card>
-          </div>
-        </BackgroundWrapper>
-      </>
+      <Card className="text-center">
+        <h2 className="text-2xl font-semibold text-yellow-600 mb-4">
+          Not Ready Yet
+        </h2>
+        <p className="text-gray-600 mb-6">
+          All circle members need to complete their daily questions before
+          viewing the match preview.
+        </p>
+        <Button onClick={handleBackToTrackingBoard} variant="primary">
+          Back to Tracking Board
+        </Button>
+      </Card>
     );
   }
 
   return (
     <>
-      <Navbar onLogout={handleLogout} user={user} />
-      <BackgroundWrapper variant="padded">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              🎯 Match Preview
-            </h1>
-            <p className="text-xl text-gray-600">
-              Discover your circle's daily DISC personality traits and
-              compatibility
-            </p>
-          </div>
+      {/* Header */}
+      <PageHeader
+        title="🎯 Match Preview"
+        subtitle="Discover your circle's daily DISC personality traits and compatibility"
+      />
 
-          {/* Circle Members with DISC Traits */}
-          <div className="space-y-6">
-            {matchPreview.circleMembers.map((member) => (
-              <MatchMemberCard
-                key={member._id}
-                member={member}
-                isSinglePersonCircle={matchPreview.isSinglePersonCircle}
-              />
-            ))}
-          </div>
+      {/* Circle Members with DISC Traits */}
+      <div className="space-y-6">
+        {matchPreview.circleMembers.map((member) => (
+          <MatchMemberCard
+            key={member._id}
+            member={member}
+            isSinglePersonCircle={matchPreview.isSinglePersonCircle}
+          />
+        ))}
+      </div>
 
-          {/* Action Buttons */}
-          <div className="text-center mt-12 space-y-4">
-            <div className="space-x-4">
-              <Button
-                onClick={handleBackToTrackingBoard}
-                variant="primary"
-                icon="←"
-              >
-                Back to Tracking Board
-              </Button>
-              <Button onClick={handleBackToHome} variant="secondary">
-                Back to Home
-              </Button>
-            </div>
-          </div>
+      {/* Action Buttons */}
+      <div className="text-center mt-12 space-y-4">
+        <div className="space-x-4">
+          <Button
+            onClick={handleBackToTrackingBoard}
+            variant="primary"
+            icon="←"
+          >
+            Back to Tracking Board
+          </Button>
+          <Button onClick={handleBackToHome} variant="secondary">
+            Back to Home
+          </Button>
         </div>
-      </BackgroundWrapper>
+      </div>
     </>
   );
 };

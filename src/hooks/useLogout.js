@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth.jsx";
 
-/**
- * Custom hook for handling logout functionality
- * Eliminates duplication of logout logic across pages
- */
+// this hook handles logout functionality.
+// it is to check if the user is logged in. If not, it will redirect to the login.
 export const useLogout = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();

@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
-import { useLogout } from "../hooks/useLogout.js";
 import { BASE_URL } from "../config/api.js";
 // components
-import Navbar from "../components/Navigation/Navbar.jsx";
-import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
-import { Button, Card, BackgroundWrapper } from "../components/UI";
+import {
+  Button,
+  Card,
+  PageHeader,
+  LoadingPage,
+  ErrorPage,
+} from "../components/UI";
 import Avatar from "../components/UI/Avatar.jsx";
 import {
   getApiErrorMessage,
@@ -16,7 +19,6 @@ import {
 const TrackingBoardPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { handleLogout } = useLogout();
   const [trackingBoard, setTrackingBoard] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -54,7 +56,7 @@ const TrackingBoardPage = () => {
       } else {
         const errorData = await response.json();
         if (response.status === 401) {
-          handleLogout();
+          navigate("/login");
           return;
         }
         setError(
@@ -103,147 +105,109 @@ const TrackingBoardPage = () => {
   };
 
   if (isLoading) {
-    return (
-      <>
-        <Navbar onLogout={handleLogout} user={user} />
-        <BackgroundWrapper variant="padded">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-center items-center h-64">
-              <LoadingSpinner />
-            </div>
-          </div>
-        </BackgroundWrapper>
-      </>
-    );
+    return <LoadingPage text="Loading tracking board..." />;
   }
 
   if (error) {
     return (
-      <>
-        <Navbar onLogout={handleLogout} user={user} />
-        <BackgroundWrapper variant="padded">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="text-center">
-              <h2 className="text-2xl font-semibold text-red-600 mb-4">
-                Error
-              </h2>
-              <p className="text-gray-600 mb-6">{error}</p>
-              <div className="space-x-4">
-                <Button onClick={fetchTrackingBoard} variant="primary">
-                  Try Again
-                </Button>
-                <Button onClick={handleBackToHome} variant="secondary">
-                  Back to Home
-                </Button>
-              </div>
-            </Card>
-          </div>
-        </BackgroundWrapper>
-      </>
+      <ErrorPage
+        error={error}
+        onRetry={fetchTrackingBoard}
+        onBack={handleBackToHome}
+        backText="Back to Home"
+      />
     );
   }
 
   return (
     <>
-      <Navbar onLogout={handleLogout} user={user} />
-      <BackgroundWrapper variant="padded">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              📊 Tracking Board
-            </h1>
-            <p className="text-xl text-gray-600">
-              See how your circle is doing with daily mood assessments
-            </p>
+      {/* Header */}
+      <PageHeader
+        title="📊 Tracking Board"
+        subtitle="See how your circle is doing with daily mood assessments"
+      />
+
+      {/* Circle Info */}
+      {trackingBoard && (
+        <Card className="mb-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+              {trackingBoard.circleName}
+            </h2>
+            <div className="flex items-center justify-center space-x-4">
+              <span className="text-gray-600">
+                {trackingBoard.members.length} members
+              </span>
+              <span className="text-gray-600">•</span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  trackingBoard.allCompleted
+                    ? "bg-green-100 text-green-800"
+                    : "bg-yellow-100 text-yellow-800"
+                }`}
+              >
+                {trackingBoard.allCompleted ? "All Completed" : "In Progress"}
+              </span>
+            </div>
           </div>
 
-          {/* Circle Info */}
-          {trackingBoard && (
-            <Card className="mb-8">
-              <div className="text-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                  {trackingBoard.circleName}
-                </h2>
-                <div className="flex items-center justify-center space-x-4">
-                  <span className="text-gray-600">
-                    {trackingBoard.members.length} members
-                  </span>
-                  <span className="text-gray-600">•</span>
+          {/* Members List */}
+          <div className="space-y-4">
+            {trackingBoard.members.map((member) => (
+              <div
+                key={member._id}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+              >
+                <div className="flex items-center space-x-4">
+                  <Avatar
+                    src={member.avatar}
+                    alt={member.displayName}
+                    displayName={member.displayName}
+                    size="md"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-900">
+                      {member.displayName}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {member.answeredCount}/
+                      {trackingBoard?.totalQuestions || 4} questions answered
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      trackingBoard.allCompleted
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                      member.status
+                    )}`}
                   >
-                    {trackingBoard.allCompleted
-                      ? "All Completed"
-                      : "In Progress"}
+                    {getStatusText(member.status)}
                   </span>
                 </div>
               </div>
-
-              {/* Members List */}
-              <div className="space-y-4">
-                {trackingBoard.members.map((member) => (
-                  <div
-                    key={member._id}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <Avatar
-                        src={member.avatar}
-                        alt={member.displayName}
-                        displayName={member.displayName}
-                        size="md"
-                      />
-                      <div>
-                        <h3 className="font-medium text-gray-900">
-                          {member.displayName}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          {member.answeredCount}/
-                          {trackingBoard?.totalQuestions || 4} questions
-                          answered
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                          member.status
-                        )}`}
-                      >
-                        {getStatusText(member.status)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
-
-          {/* Action Buttons */}
-          <div className="text-center space-y-4">
-            {trackingBoard && trackingBoard.allCompleted && (
-              <Button
-                onClick={handleViewMatchPreview}
-                variant="success"
-                size="lg"
-                icon="🎯"
-              >
-                View Match Preview
-              </Button>
-            )}
-            <div>
-              <Button onClick={handleBackToHome} variant="primary" icon="←">
-                Back to Home
-              </Button>
-            </div>
+            ))}
           </div>
+        </Card>
+      )}
+
+      {/* Action Buttons */}
+      <div className="text-center space-y-4">
+        {trackingBoard && trackingBoard.allCompleted && (
+          <Button
+            onClick={handleViewMatchPreview}
+            variant="success"
+            size="lg"
+            icon="🎯"
+          >
+            View Match Preview
+          </Button>
+        )}
+        <div>
+          <Button onClick={handleBackToHome} variant="primary" icon="←">
+            Back to Home
+          </Button>
         </div>
-      </BackgroundWrapper>
+      </div>
     </>
   );
 };

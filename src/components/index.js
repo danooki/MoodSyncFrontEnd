@@ -27,3 +27,6 @@ export { default as Navbar } from "./Navigation/Navbar.jsx";
 export { default as CircleInvitations } from "./Features/CircleInvitations.jsx";
 export { default as UserProfile } from "./Features/UserProfile.jsx";
 export { default as ProgressBar } from "./Features/ProgressBar.jsx";
+
+// Layout Components
+export { PageHeader, LoadingPage, ErrorPage } from "./UI";

@@ -3,22 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { useCircleManagement } from "../hooks/useCircleManagement.js";
 import { useDailyScore } from "../hooks/useDailyScore.js";
-import { useLogout } from "../hooks/useLogout.js";
 import { BASE_URL } from "../config/api.js";
 import {
   getApiErrorMessage,
   getNetworkErrorMessage,
 } from "../utils/errorUtils.js";
-import Navbar from "../components/Navigation/Navbar.jsx";
 import CircleStatusCard from "../components/Cards/CircleStatusCard.jsx";
 import CircleInvitations from "../components/Features/CircleInvitations.jsx";
 import InviteFriendModal from "../components/Modals/InviteFriendModal.jsx";
-import { BackgroundWrapper } from "../components/UI";
+import { PageHeader } from "../components/UI";
 
 const HomePage = () => {
   const { user, fetchUserProfile } = useAuth();
   const navigate = useNavigate();
-  const { handleLogout } = useLogout();
 
   // Circle management hook
   const {
@@ -182,45 +179,36 @@ const HomePage = () => {
 
   return (
     <>
-      <Navbar onLogout={handleLogout} user={user} />
-      <BackgroundWrapper variant="padded">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Welcome Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Welcome back, {user?.displayName}! 👋
-            </h1>
-            <p className="text-xl text-gray-600">
-              Ready to sync your mood with your circle?
-            </p>
-          </div>
+      {/* Welcome Header */}
+      <PageHeader
+        title={`Welcome back, ${user?.displayName}! 👋`}
+        subtitle="Ready to sync your mood with your circle?"
+      />
 
-          {/* Circle Status Card */}
-          <CircleStatusCard
-            user={user}
-            circleStatus={circleStatus}
-            isLoading={isLoadingCircle}
-            error={circleError}
-            onCreateCircle={handleCreateCircle}
-            onInviteFriend={handleInviteFriendClick}
-            onStartQuestions={handleStartQuestions}
-            hasAnsweredAllQuestions={hasAnsweredAllQuestions}
-            dailyScoreDate={dailyScoreDate}
-            circleName={circleName}
-            setCircleName={setCircleName}
-            isCreatingCircle={isCreatingCircle}
-          />
+      {/* Circle Status Card */}
+      <CircleStatusCard
+        user={user}
+        circleStatus={circleStatus}
+        isLoading={isLoadingCircle}
+        error={circleError}
+        onCreateCircle={handleCreateCircle}
+        onInviteFriend={handleInviteFriendClick}
+        onStartQuestions={handleStartQuestions}
+        hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+        dailyScoreDate={dailyScoreDate}
+        circleName={circleName}
+        setCircleName={setCircleName}
+        isCreatingCircle={isCreatingCircle}
+      />
 
-          {/* Pending Invitations */}
-          <CircleInvitations
-            invitations={circleInvitations}
-            isLoading={isLoadingInvitations}
-            onRefresh={fetchCircleInvitationsData}
-            onAccept={handleAcceptInvite}
-            onDecline={handleDeclineInvite}
-          />
-        </div>
-      </BackgroundWrapper>
+      {/* Pending Invitations */}
+      <CircleInvitations
+        invitations={circleInvitations}
+        isLoading={isLoadingInvitations}
+        onRefresh={fetchCircleInvitationsData}
+        onAccept={handleAcceptInvite}
+        onDecline={handleDeclineInvite}
+      />
 
       {/* Invite Friend Modal */}
       <InviteFriendModal
