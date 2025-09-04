@@ -1,48 +1,59 @@
 # MoodSync Frontend
 
-A responsive mobile-first React application for the MoodSync API.
+A responsive mobile-first React application for the MoodSyncAPI.
 
-## Installation
+## Features
 
-1. Install dependencies:
+- User authentication (login/register)
+- Daily question interface (DiSC)
+- Circle management and invitations
+- Progress tracking
+- User profile management
+- Match preview functionality
+
+**In Development:**
+
+- hardProposals
+- Performance optimizations
+- User Settings
+- Final desing overhaul: enhance components
+
+## Quick Start
 
 ```bash
 npm install
 ```
 
-2. Start the development server:
-
 ```bash
 npm run dev
 ```
 
-3. Open your browser and navigate to `http://localhost:5173`
+Open `http://localhost:5173`
 
 ## Project Structure
 
-This project is built on modular architecture separating UI components from page logic.
-
-```
+```bash
 src/
-├── pages/                 # Page components with business logic
+├── pages/                 # Route components with business logic
 │   ├── HomePage.jsx       # Main dashboard with circle management
 │   ├── LoginPage.jsx      # User authentication
 │   ├── RegisterPage.jsx   # User registration
 │   ├── ProfilePage.jsx    # User profile management
-│   ├── FindYourMoodPage.jsx # DISC personality assessment
+│   ├── QuestionInterfacePage.jsx # Daily question interface
+│   ├── TrackingBoardPage.jsx # Circle progress tracking
+│   ├── MatchPreviewPage.jsx # Match preview and member details
 │   └── ErrorPage.jsx      # Error handling and redirects
-├── components/            # Reusable UI components
-│   ├── Navbar.jsx         # Navigation header
-│   ├── LoadingSpinner.jsx # Reusable loading indicator
-│   ├── CircleStatusCard.jsx # Circle status display
-│   ├── CircleInvitations.jsx # Circle invitation management
-│   ├── QuickActions.jsx   # Action buttons grid
-│   ├── InviteFriendModal.jsx # Friend invitation modal
-│   └── UserProfile.jsx    # Profile form and display
+├── components/            # Reusable components
+│   ├── UI/                # Pure UI components (buttons, inputs, etc.)
+│   ├── Cards/             # Card-based components
+│   ├── Features/          # Feature-specific components
+│   ├── Modals/            # Modal components
+│   └── Navigation/        # Navigation components
+├── hooks/                 # Custom hooks for business logic
 ├── layouts/               # Layout components
-├── contexts/              # React context
-├── hooks/                 # Custom hooks
+├── contexts/              # React AuthContext
 ├── config/                # Configuration files
+├── utils/                 # Helper functions
 ├── App.jsx                # Main application component
 ├── main.jsx               # Application entry point
 └── index.css              # Global styles with Tailwind CSS
@@ -50,26 +61,47 @@ src/
 
 ### Architecture Benefits
 
-1. **Separation of Concerns**: Business logic is separated from UI presentation
-2. **Reusability**: UI components can be reused across different pages
-3. **Maintainability**: Easier to locate and modify specific functionality
-4. **Testing**: Components can be tested in isolation
-5. **Scalability**: New features can be added without affecting existing components
+- **Separation of Concerns**: Business logic separated from UI presentation
+- **Reusability**: UI components can be reused across different pages
+- **Maintainability**: Easier to locate and modify specific functionality
+- **Scalability**: New features can be added without affecting existing components
 
 ## Routing
-
-The application uses React Router with proper error handling for invalid routes:
 
 ### Valid Routes
 
 - `/` → redirects to `/home`
-- `/home` → shows HomePage (if authenticated)
-- `/login` → shows LoginPage (if not authenticated)
-- `/register` → shows RegisterPage (if not authenticated)
-- `/profile` → shows ProfilePage (if authenticated)
-- `/find-your-mood` → shows FindYourMoodPage (if authenticated)
+- `/login` → LoginPage (unauthenticated)
+- `/register` → RegisterPage (unauthenticated)
+- `/home` → HomePage (authenticated)
+- `/profile` → ProfilePage (authenticated)
+- `/questions` → QuestionInterfacePage (authenticated)
+- `/tracking-board` → TrackingBoardPage (authenticated)
+- `/match-preview` → MatchPreviewPage (authenticated)
 
 ### Invalid Routes
 
-- Any invalid path → redirects to `/login` (if not authenticated) or `/home` (if authenticated)
-- Uses ErrorPage component for smart redirects based on authentication status
+- Any invalid path → redirects to `/login` (unauthenticated) or `/home` (authenticated)
+
+## Development Guidelines
+
+### Code Organization
+
+1. **Keep files under 200 lines** for maintainability
+2. **Separate business logic** into custom hooks
+3. **Extract reusable UI patterns** into UI/ components
+4. **Use descriptive component names** that indicate their purpose
+
+### Folder Architecture
+
+- **UI Components**: Place in `src/components/UI/` if pure presentational
+- **Business Components**: Place in `src/components/` if containing business logic
+- **Custom Hooks**: Place in `src/hooks/` for reusable business logic
+- **Pages**: Place in `src/pages/` for route-specific components
+
+### Best Practices
+
+- Full Javascript + React
+- Implement proper error boundaries and loading states
+- Follow established naming conventions
+- Test components in isolation when possible

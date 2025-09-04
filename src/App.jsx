@@ -5,7 +5,10 @@ import AuthLayout from "./layouts/AuthLayout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
-import FindYourMoodPage from "./pages/FindYourMoodPage";
+
+import QuestionInterfacePage from "./pages/QuestionInterfacePage";
+import TrackingBoardPage from "./pages/TrackingBoardPage";
+import MatchPreviewPage from "./pages/MatchPreviewPage";
 import ProfilePage from "./pages/ProfilePage";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
@@ -24,7 +27,10 @@ const App = () => {
         {/* Protected routes - all nested under ProtectedLayout */}
         <Route element={<ProtectedLayout />}>
           <Route path="/home" element={<HomePage />} />
-          <Route path="/find-your-mood" element={<FindYourMoodPage />} />
+
+          <Route path="/questions" element={<QuestionInterfacePage />} />
+          <Route path="/tracking-board" element={<TrackingBoardPage />} />
+          <Route path="/match-preview" element={<MatchPreviewPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
 

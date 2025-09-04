@@ -1,25 +1,40 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
+import { useLogout } from "../hooks/useLogout.js";
+import Navbar from "../components/Navigation/Navbar.jsx";
+import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
+import BackgroundWrapper from "../components/UI/BackgroundWrapper.jsx";
 
 const ProtectedLayout = () => {
   const { user, isLoading } = useAuth();
+  const { handleLogout } = useLogout();
 
+  // Auth loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <BackgroundWrapper variant="centered">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <LoadingSpinner size="lg" text="Loading..." />
         </div>
-      </div>
+      </BackgroundWrapper>
     );
   }
 
+  // Redirect to login if not authenticated
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <Navbar onLogout={handleLogout} user={user} />
+      <BackgroundWrapper variant="padded">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Outlet />
+        </div>
+      </BackgroundWrapper>
+    </>
+  );
 };
 
 export default ProtectedLayout;

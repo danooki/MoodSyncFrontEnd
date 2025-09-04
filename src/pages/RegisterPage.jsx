@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
+import {
+  Button,
+  Input,
+  Card,
+  ErrorMessage,
+  SuccessMessage,
+  LoadingSpinner,
+} from "../components/UI";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -11,21 +19,28 @@ const RegisterPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    // Clear error when user starts typing
+    if (error) {
+      setError("");
+    }
   };
 
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, fetchUserProfile } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setSuccess(false);
 
     // Basic validation
     if (formData.password !== formData.confirmPassword) {
@@ -53,7 +68,12 @@ const RegisterPage = () => {
     });
 
     if (result.success) {
-      navigate("/home");
+      setSuccess(true);
+      // Show success message for 3 seconds, then fetch user profile and navigate
+      setTimeout(async () => {
+        await fetchUserProfile();
+        navigate("/home");
+      }, 3000);
     } else {
       setError(result.message);
     }
@@ -71,121 +91,95 @@ const RegisterPage = () => {
           <p className="text-gray-600">Join MoodSync today</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
-                {error}
+        <Card className="p-6 sm:p-8">
+          {success ? (
+            <div className="text-center space-y-4">
+              <SuccessMessage message="Account created successfully! Redirecting to home..." />
+              <LoadingSpinner size="md" text="" className="mx-auto" />
+            </div>
+          ) : (
+            <>
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {error && <ErrorMessage message={error} />}
+
+                <Input
+                  id="displayName"
+                  name="displayName"
+                  type="text"
+                  label="Display Name"
+                  autoComplete="username"
+                  required
+                  value={formData.displayName}
+                  onChange={handleChange}
+                  placeholder="Choose a display name"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  This will be your public name in the app
+                </p>
+
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="Email Address"
+                  autoComplete="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                />
+
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  label="Password"
+                  autoComplete="new-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Create a password"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Must be at least 6 characters long
+                </p>
+
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  label="Confirm Password"
+                  autoComplete="new-password"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                />
+
+                <Button
+                  type="submit"
+                  loading={isLoading}
+                  disabled={isLoading}
+                  fullWidth
+                >
+                  {isLoading ? "Creating account..." : "Create Account"}
+                </Button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    Sign in here
+                  </Link>
+                </p>
               </div>
-            )}
-
-            <div>
-              <label
-                htmlFor="displayName"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Display Name
-              </label>
-              <input
-                id="displayName"
-                name="displayName"
-                type="text"
-                autoComplete="username"
-                required
-                value={formData.displayName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Choose a display name"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                This will be your public name in the app
-              </p>
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Email Address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Enter your email"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Create a password"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                Must be at least 6 characters long
-              </p>
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                required
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Confirm your password"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoading ? "Creating account..." : "Create Account"}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Sign in here
-              </Link>
-            </p>
-          </div>
-        </div>
+            </>
+          )}
+        </Card>
       </div>
     </div>
   );

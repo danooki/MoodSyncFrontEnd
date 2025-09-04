@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { BASE_URL } from "../config/api.js";
-import { AuthContext } from "./AuthContext.js";
+import { getLoginErrorMessage, getRegistrationErrorMessage, getNetworkErrorMessage } from "../utils/errorUtils.js";
+
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchUserProfile = async () => {
+    // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
+    // The backend will reject the request if the cookie is invalid
     try {
       setIsLoading(true);
       const response = await fetch(`${BASE_URL}/user/me`, {
@@ -39,6 +43,8 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is already logged in on app load
   useEffect(() => {
+    // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
+    // The backend will reject the request if the cookie is invalid
     fetchUserProfile();
   }, []);
 
@@ -61,10 +67,13 @@ export const AuthProvider = ({ children }) => {
         await fetchUserProfile();
         return { success: true, user: data };
       } else {
-        return { success: false, message: data.message || "Login failed" };
+        // Use simplified error handling
+        const errorMessage = getLoginErrorMessage(response, data);
+        return { success: false, message: errorMessage };
       }
-    } catch {
-      return { success: false, message: "Network error. Please try again." };
+    } catch (error) {
+      console.error("Login error:", error);
+      return { success: false, message: getNetworkErrorMessage() };
     }
   };
 
@@ -87,17 +96,16 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         // Backend returns user data
-        // After registration, fetch the complete user profile including circle data
-        await fetchUserProfile();
+        // Don't fetch user profile immediately to allow success message to show
         return { success: true, user: data };
       } else {
         return {
           success: false,
-          message: data.message || "Registration failed",
+          message: getRegistrationErrorMessage(data),
         };
       }
     } catch {
-      return { success: false, message: "Network error. Please try again." };
+      return { success: false, message: getNetworkErrorMessage() };
     }
   };
 
@@ -140,7 +148,7 @@ export const AuthProvider = ({ children }) => {
         };
       }
     } catch {
-      return { success: false, message: "Network error. Please try again." };
+      return { success: false, message: getNetworkErrorMessage() };
     }
   };
 
