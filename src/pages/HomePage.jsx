@@ -5,7 +5,7 @@ import { useCircleManagement } from "../hooks/useCircleManagement.js";
 import { useInvitationManagement } from "../hooks/useInvitationManagement.js";
 import { useDailyScore } from "../hooks/useDailyScore.js";
 import Navbar from "../components/Navigation/Navbar.jsx";
-import CircleStatusCard from "../components/Features/CircleStatusCard.jsx";
+import CircleStatusCard from "../components/Cards/CircleStatusCard.jsx";
 import CircleInvitations from "../components/Features/CircleInvitations.jsx";
 
 import InviteFriendModal from "../components/Modals/InviteFriendModal.jsx";
@@ -27,6 +27,7 @@ const HomePage = () => {
     handleCreateCircle,
   } = useCircleManagement();
 
+  // Invitation block: InviteFriendmodal.jsx and CircleInvitations.jsx
   const {
     showInviteModal,
     inviteDisplayName,
@@ -52,6 +53,7 @@ const HomePage = () => {
     isLoadingDailyScore,
     checkDailyScore,
     hasAnsweredAllQuestions,
+    dailyScoreDate,
   } = useDailyScore();
 
   // Load data on component mount
@@ -94,13 +96,15 @@ const HomePage = () => {
 
           {/* Circle Status Card */}
           <CircleStatusCard
+            user={user}
             circleStatus={circleStatus}
             isLoading={isLoadingCircle}
             error={circleError}
-            onCreateCircle={checkCircleStatus}
+            onCreateCircle={handleCreateCircle}
             onInviteFriend={handleInviteFriendClick}
             onStartQuestions={handleStartQuestions}
             hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+            dailyScoreDate={dailyScoreDate}
             circleName={circleName}
             setCircleName={setCircleName}
             isCreatingCircle={isCreatingCircle}

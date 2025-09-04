@@ -18,7 +18,10 @@ export const useCircleManagement = () => {
     try {
       setIsLoadingCircle(true);
       setCircleError("");
-      const response = await fetch(`${BASE_URL}/circle/my-circle`, {
+
+      const url = `${BASE_URL}/circle/my-circle`;
+
+      const response = await fetch(url, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",

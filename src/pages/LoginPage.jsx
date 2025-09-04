@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
-import { useErrorHandler } from "../hooks/useErrorHandler.js";
 import { Button, Input, Card } from "../components/UI";
 
 const LoginPage = () => {
@@ -10,6 +9,7 @@ const LoginPage = () => {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -20,12 +20,10 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const { login } = useAuth();
-  const { showError, clearError, startOperation, finishOperation } =
-    useErrorHandler();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    startOperation();
+    setError("");
     setIsLoading(true);
 
     const result = await login(formData);
@@ -33,10 +31,9 @@ const LoginPage = () => {
     if (result.success) {
       navigate("/home");
     } else {
-      showError(result.message);
+      setError(result.message);
     }
 
-    finishOperation();
     setIsLoading(false);
   };
 
@@ -52,6 +49,11 @@ const LoginPage = () => {
 
         <Card className="p-6 sm:p-8">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
             <Input
               id="email"
               name="email"

@@ -4,13 +4,22 @@ import Card from "../UI/Card";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import SectionHeader from "../UI/SectionHeader";
-import {
-  FormSection,
-  FormRow,
-  FormActions,
-  SuccessMessage,
-  ErrorMessage,
-} from "../UI/Form";
+// Simple inline form components
+const SuccessMessage = ({ message, className = "" }) => (
+  <div
+    className={`bg-green-50 border border-green-200 rounded-lg p-3 ${className}`}
+  >
+    <p className="text-green-600 text-sm">{message}</p>
+  </div>
+);
+
+const ErrorMessage = ({ message, className = "" }) => (
+  <div
+    className={`bg-red-50 border border-red-200 rounded-lg p-3 ${className}`}
+  >
+    <p className="text-red-600 text-sm">{message}</p>
+  </div>
+);
 
 const UserProfile = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -82,55 +91,70 @@ const UserProfile = ({ user }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Personal Information */}
-            <FormSection title="Personal Information">
-              {isEditing ? (
-                <div className="space-y-4">
-                  <Input
-                    type="email"
-                    label="Email"
-                    name="email"
-                    value={editForm.email}
-                    onChange={handleEditChange}
-                    required
-                  />
+            <div className="space-y-4">
+              <div className="border-b border-gray-200 pb-3">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Personal Information
+                </h3>
+              </div>
+              <div className="space-y-4">
+                {isEditing ? (
+                  <div className="space-y-4">
+                    <Input
+                      type="email"
+                      label="Email"
+                      name="email"
+                      value={editForm.email}
+                      onChange={handleEditChange}
+                      required
+                    />
 
-                  <FormActions>
-                    <Button
-                      onClick={handleSave}
-                      loading={isLoading}
-                      disabled={isLoading}
-                      variant="primary"
-                      className="flex-1"
-                    >
-                      Save Changes
-                    </Button>
-                    <Button
-                      onClick={handleCancel}
-                      variant="secondary"
-                      className="flex-1"
-                    >
-                      Cancel
-                    </Button>
-                  </FormActions>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-sm font-medium text-gray-500">
-                      Email
-                    </span>
-                    <p className="text-gray-900">{user.email}</p>
+                    <div className="flex space-x-3">
+                      <Button
+                        onClick={handleSave}
+                        loading={isLoading}
+                        disabled={isLoading}
+                        variant="primary"
+                        className="flex-1"
+                      >
+                        Save Changes
+                      </Button>
+                      <Button
+                        onClick={handleCancel}
+                        variant="secondary"
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div>
+                      <span className="text-sm font-medium text-gray-500">
+                        Email
+                      </span>
+                      <p className="text-gray-900">{user.email}</p>
+                    </div>
 
-                  <Button onClick={() => setIsEditing(true)} variant="primary">
-                    Edit Profile
-                  </Button>
-                </div>
-              )}
-            </FormSection>
+                    <Button
+                      onClick={() => setIsEditing(true)}
+                      variant="primary"
+                    >
+                      Edit Profile
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
 
             {/* Circle Information */}
-            <FormSection title="Circle Information">
+            <div className="space-y-4">
+              <div className="border-b border-gray-200 pb-3">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Circle Information
+                </h3>
+              </div>
               <div className="space-y-4">
                 {user.circle ? (
                   <>
@@ -187,16 +211,21 @@ const UserProfile = ({ user }) => {
                     <span className="text-sm font-medium text-gray-500">
                       Circle Membership
                     </span>
-                    <p className="text-gray-900 text-amber-600">
+                    <p className="text-amber-600">
                       Not currently part of any circle
                     </p>
                   </div>
                 )}
               </div>
-            </FormSection>
+            </div>
 
             {/* Account Information */}
-            <FormSection title="Account Information">
+            <div className="space-y-4">
+              <div className="border-b border-gray-200 pb-3">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Account Information
+                </h3>
+              </div>
               <div className="space-y-4">
                 <div>
                   <span className="text-sm font-medium text-gray-500">
@@ -237,7 +266,7 @@ const UserProfile = ({ user }) => {
                   </p>
                 </div>
               </div>
-            </FormSection>
+            </div>
           </div>
         </div>
       </Card>

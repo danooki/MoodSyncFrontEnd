@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Button from "./Button";
 
 /**
  * Reusable Modal component with consistent overlay and positioning
@@ -61,9 +62,11 @@ const Modal = ({
               <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
             )}
             {showCloseButton && (
-              <button
+              <Button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                variant="secondary"
+                size="sm"
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1"
                 aria-label="Close modal"
               >
                 <svg
@@ -79,7 +82,7 @@ const Modal = ({
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             )}
           </div>
         )}

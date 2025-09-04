@@ -6,7 +6,7 @@ export { default as Modal } from "./Modal";
 export { default as SectionHeader } from "./SectionHeader";
 
 // Form Components
-export * from "./Form";
+// Form components removed - using simple inline components instead
 
 // Icons (named exports)
 export { CircleIcon, PlusIcon } from "./Icons";
@@ -14,8 +14,5 @@ export { CircleIcon, PlusIcon } from "./Icons";
 // Existing Components
 export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as ErrorDisplay } from "./ErrorDisplay";
-export { default as StatusCard } from "./StatusCard";
-export { default as DiscInfoCards } from "./DiscInfoCards";
-export { default as DiscScoreDisplay } from "./DiscScoreDisplay";
-export { default as GlobalErrorDisplay } from "./GlobalErrorDisplay";
-export { default as InlineError } from "./InlineError";
+export { default as GenericCard } from "./GenericCard";
+export { default as QuestionResetTimer } from "./QuestionResetTimer";

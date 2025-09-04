@@ -34,7 +34,7 @@ const TrackingBoardPage = () => {
 
         // Handle different possible response structures
         if (data.trackingBoard) {
-          console.log("Using data.trackingBoard:", data.trackingBoard);
+          // console.log("Using data.trackingBoard:", data.trackingBoard);
           setTrackingBoard(data.trackingBoard);
         } else if (data.circleId) {
           // Direct response structure

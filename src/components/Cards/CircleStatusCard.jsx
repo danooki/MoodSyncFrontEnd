@@ -1,13 +1,14 @@
 import React from "react";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import ErrorDisplay from "../UI/ErrorDisplay";
-import StatusCard from "../UI/StatusCard";
-import { CircleIcon, PlusIcon } from "../UI";
+import GenericCard from "../UI/GenericCard";
+import { CircleIcon, PlusIcon, QuestionResetTimer } from "../UI";
 import Card from "../UI/Card";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 
 const CircleStatusCard = ({
+  user,
   circleStatus,
   isLoading,
   error,
@@ -15,6 +16,7 @@ const CircleStatusCard = ({
   onInviteFriend,
   onStartQuestions,
   hasAnsweredAllQuestions,
+  dailyScoreDate,
   circleName,
   setCircleName,
   isCreatingCircle,
@@ -40,18 +42,29 @@ const CircleStatusCard = ({
     );
   }
 
-  if (circleStatus?.isInCircle) {
-    const actions = [];
+  /*   // Debug: Log the current state
+  console.log("Debug - Current state:", {
+    isLoading,
+    error,
+    circleStatus,
+    hasCircle: circleStatus?.isInCircle,
+    userCircle: user?.circle,
+  }); */
 
+  if (circleStatus?.isInCircle) {
+    const buttons = [];
+    const isOwner = circleStatus.owner._id === user?.id;
+
+    // Primary button always comes first
     if (hasAnsweredAllQuestions) {
-      actions.push({
+      buttons.push({
         icon: "📊",
         text: "View your Board",
         onClick: onStartQuestions,
         variant: "success",
       });
     } else {
-      actions.push({
+      buttons.push({
         icon: "🎯",
         text: "Start Questions",
         onClick: onStartQuestions,
@@ -59,15 +72,18 @@ const CircleStatusCard = ({
       });
     }
 
-    actions.push({
-      icon: "👥",
-      text: "Invite a Friend",
-      onClick: onInviteFriend,
-      variant: "default",
-    });
+    // Secondary buttons follow - invite button only for owners
+    if (isOwner) {
+      buttons.push({
+        icon: "👥",
+        text: "Invite a Friend",
+        onClick: onInviteFriend,
+        variant: "default",
+      });
+    }
 
     return (
-      <StatusCard
+      <GenericCard
         icon={<CircleIcon />}
         title={`Your Circle: ${circleStatus.circleName}`}
         description={
@@ -75,14 +91,41 @@ const CircleStatusCard = ({
             ? "You've completed today's mood assessment! Check how your circle is doing."
             : "You're all set! Ready to answer today's questions?"
         }
-        actions={actions}
-        variant="success"
-      />
+        buttons={buttons}
+      >
+        {/* Show role and timer below the buttons */}
+        <div className="mt-6 space-y-4">
+          {/* Role display */}
+          <div className="text-center">
+            <span
+              className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                isOwner
+                  ? "bg-purple-100 text-purple-800"
+                  : "bg-blue-100 text-blue-800"
+              }`}
+            >
+              {isOwner ? "👑 Circle Owner" : "👤 Circle Member"}
+            </span>
+          </div>
+
+          {/* Invite message for non-owners */}
+          {!isOwner && (
+            <div className="text-center text-gray-600 text-sm">
+              The owner of the circle can invite friends
+            </div>
+          )}
+
+          {/* Show timer when all questions are answered */}
+          {hasAnsweredAllQuestions && dailyScoreDate && (
+            <QuestionResetTimer dailyScoreDate={dailyScoreDate} />
+          )}
+        </div>
+      </GenericCard>
     );
   }
 
   return (
-    <StatusCard
+    <GenericCard
       icon={<PlusIcon />}
       title="Create Your Circle"
       description="Start your mood-syncing journey by creating a circle with friends"
@@ -108,7 +151,7 @@ const CircleStatusCard = ({
           {isCreatingCircle ? "Creating..." : "Create Circle"}
         </Button>
       </form>
-    </StatusCard>
+    </GenericCard>
   );
 };
 

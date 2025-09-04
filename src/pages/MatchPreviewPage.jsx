@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
 import Navbar from "../components/Navigation/Navbar.jsx";
 import LoadingSpinner from "../components/UI/LoadingSpinner.jsx";
-import MatchMemberCard from "../components/Features/MatchMemberCard.jsx";
+import MatchMemberCard from "../components/Cards/MatchMemberCard.jsx";
 import { Button, Card } from "../components/UI";
 
 const MatchPreviewPage = () => {

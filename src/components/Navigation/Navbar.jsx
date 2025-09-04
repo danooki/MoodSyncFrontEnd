@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../UI/Button";
 
 const Navbar = ({ onLogout, user }) => {
   const navigate = useNavigate();
@@ -87,9 +88,10 @@ const Navbar = ({ onLogout, user }) => {
 
             {/* Profile Menu */}
             <div className="relative" ref={profileMenuRef}>
-              <button
+              <Button
                 onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                className="relative flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                variant="secondary"
+                className="relative flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 p-2"
               >
                 <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium hover:bg-indigo-700 transition-colors">
                   {user?.displayName
@@ -115,7 +117,7 @@ const Navbar = ({ onLogout, user }) => {
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-              </button>
+              </Button>
 
               {/* Profile Dropdown Menu */}
               {isProfileMenuOpen && (
@@ -129,19 +131,21 @@ const Navbar = ({ onLogout, user }) => {
                     </p>
                   </div>
 
-                  <button
+                  <Button
                     onClick={handleProfileClick}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors"
+                    variant="secondary"
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors justify-start"
                   >
                     👤 Profile Settings
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     onClick={handleLogoutClick}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 focus:outline-none focus:bg-red-50 transition-colors"
+                    variant="danger"
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 focus:outline-none focus:bg-red-50 transition-colors justify-start"
                   >
                     🚪 Logout
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

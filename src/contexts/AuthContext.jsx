@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         // Handle specific error cases based on status code
         let errorMessage = "Login failed";
-        
+
         if (response.status === 404) {
           errorMessage = "Email does not exist";
         } else if (response.status === 400) {
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         } else if (data.error) {
           errorMessage = data.error;
         }
-        
+
         return { success: false, message: errorMessage };
       }
     } catch (error) {

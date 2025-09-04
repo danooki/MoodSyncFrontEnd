@@ -10,7 +10,6 @@ const Input = ({
   placeholder,
   value,
   onChange,
-  onBlur,
   error,
   disabled = false,
   required = false,
@@ -50,7 +49,6 @@ const Input = ({
         type={type}
         value={value}
         onChange={onChange}
-        onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled}
         required={required}

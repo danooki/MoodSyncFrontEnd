@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
-import { Button, Input, Card, ErrorMessage } from "../components/UI";
+import { Button, Input, Card } from "../components/UI";
+
+// Simple inline error message component
+const ErrorMessage = ({ message, className = "" }) => (
+  <div
+    className={`bg-red-50 border border-red-200 rounded-lg p-3 ${className}`}
+  >
+    <p className="text-red-600 text-sm">{message}</p>
+  </div>
+);
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
