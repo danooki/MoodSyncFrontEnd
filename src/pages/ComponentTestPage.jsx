@@ -174,7 +174,7 @@ const ComponentTestPage = () => {
                 />
                 <CircleStatusCard
                   showRetryButton={true}
-                  retryButtonText="🔄 Try Again"
+                  retryButtonText="Try Again"
                   onCreateCircle={() => console.log("Create circle")}
                 />
               </div>

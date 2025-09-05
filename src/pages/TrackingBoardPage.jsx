@@ -123,7 +123,7 @@ const TrackingBoardPage = () => {
     <>
       {/* Header */}
       <PageHeader
-        title="📊 Tracking Board"
+        title="Tracking Board"
         subtitle="See how your circle is doing with daily mood assessments"
       />
 
@@ -198,7 +198,7 @@ const TrackingBoardPage = () => {
               onClick={handleViewMatchPreview}
               variant="primary"
               size="lg"
-              icon="🎯"
+              icon=""
             >
               View Match Preview
             </Button>

@@ -41,7 +41,7 @@ const ErrorDisplay = ({
         <p className="text-red-600 mb-4">{error}</p>
 
         {showRetryButton && retryAction && (
-          <Button onClick={retryAction} variant="primary" icon="🔄">
+          <Button onClick={retryAction} variant="primary" icon="">
             {retryButtonText}
           </Button>
         )}

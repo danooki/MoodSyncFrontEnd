@@ -21,7 +21,7 @@ const CircleChoiceCard = ({ onWaitingForInvite, onCreateCircle }) => {
             onClick={onWaitingForInvite}
             variant="default"
             fullWidth
-            icon="⏳"
+            icon=""
           >
             I'm waiting for an invitation to join a Circle
           </Button>
@@ -30,7 +30,7 @@ const CircleChoiceCard = ({ onWaitingForInvite, onCreateCircle }) => {
             onClick={onCreateCircle}
             variant="primary"
             fullWidth
-            icon="✨"
+            icon=""
           >
             I'm not waiting, I want to create my own Circle
           </Button>

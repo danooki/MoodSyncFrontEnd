@@ -146,7 +146,7 @@ const Navbar = ({ onLogout, user }) => {
                     variant="secondary"
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors justify-start"
                   >
-                    👤 Profile Settings
+                    Profile Settings
                   </Button>
 
                   <Button
@@ -154,7 +154,7 @@ const Navbar = ({ onLogout, user }) => {
                     variant="danger"
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 focus:outline-none focus:bg-red-50 transition-colors justify-start"
                   >
-                    🚪 Logout
+                    Logout
                   </Button>
                 </div>
               )}

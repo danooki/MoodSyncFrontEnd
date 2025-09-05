@@ -37,7 +37,7 @@ const CircleStatusCard = ({
         icon="error"
         showRetryButton={true}
         retryAction={onCreateCircle}
-        retryButtonText="🔄 Try Again"
+        retryButtonText="Try Again"
       />
     );
   }
@@ -58,14 +58,14 @@ const CircleStatusCard = ({
     // Primary button always comes first
     if (hasAnsweredAllQuestions) {
       buttons.push({
-        icon: "📊",
+        icon: "",
         text: "View your Board",
         onClick: onStartQuestions,
         variant: "success",
       });
     } else {
       buttons.push({
-        icon: "🎯",
+        icon: "",
         text: "Start Questions",
         onClick: onStartQuestions,
         variant: "primary",
@@ -75,7 +75,7 @@ const CircleStatusCard = ({
     // Secondary buttons follow - invite button only for owners
     if (isOwner) {
       buttons.push({
-        icon: "👥",
+        icon: "",
         text: "Invite a Friend",
         onClick: onInviteFriend,
         variant: "default",
@@ -104,7 +104,7 @@ const CircleStatusCard = ({
                   : "bg-blue-100 text-blue-800"
               }`}
             >
-              {isOwner ? "👑 Circle Owner" : "👤 Circle Member"}
+              {isOwner ? "Circle Owner" : "Circle Member"}
             </span>
           </div>
 
@@ -146,7 +146,7 @@ const CircleStatusCard = ({
           loading={isCreatingCircle}
           disabled={isCreatingCircle}
           fullWidth
-          icon="✨"
+          icon=""
         >
           {isCreatingCircle ? "Creating..." : "Create Circle"}
         </Button>

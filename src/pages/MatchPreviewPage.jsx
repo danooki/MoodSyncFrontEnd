@@ -104,7 +104,7 @@ const MatchPreviewPage = () => {
     <>
       {/* Header */}
       <PageHeader
-        title="🎯 Match Preview"
+        title="Match Preview"
         subtitle="Discover your circle's daily DISC personality traits and compatibility"
       />
 
@@ -126,7 +126,7 @@ const MatchPreviewPage = () => {
             onClick={handleViewProposals}
             variant="success"
             size="lg"
-            icon="🌙"
+            icon=""
           >
             View Evening Proposals
           </Button>
