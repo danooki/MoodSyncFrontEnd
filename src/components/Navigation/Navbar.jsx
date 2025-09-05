@@ -98,7 +98,7 @@ const Navbar = ({ onLogout, user }) => {
             <div className="relative">
               <Button
                 onClick={handleProfileButtonClick}
-                variant="secondary"
+                variant="message"
                 className="relative flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 p-2"
               >
                 <Avatar

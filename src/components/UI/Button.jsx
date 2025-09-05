@@ -28,16 +28,16 @@ const Button = ({
 
   const variantClasses = {
     primary:
-      "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white hover:from-indigo-700 hover:to-indigo-800 focus:ring-indigo-500 shadow-indigo-200",
+      "bg-gradient-to-r from-green-500 to-green-800 text-white hover:from-green-600 hover:to-green-900 focus:ring-green-500 shadow-green-200",
     secondary:
-      "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300 focus:ring-gray-500 shadow-gray-200",
+      "bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 focus:ring-purple-400 shadow-purple-200",
     success:
       "bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 focus:ring-green-500 shadow-green-200",
     danger:
       "bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 focus:ring-red-500 shadow-red-200",
-    info: "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 focus:ring-blue-500 shadow-blue-200",
+    info: "bg-gradient-to-r from-white to-pink-100 text-gray-600 hover:from-pink-50 hover:to-pink-150 focus:ring-pink-200 shadow-pink-50",
     message:
-      "bg-gray-100 text-gray-600 cursor-default shadow-none hover:shadow-none hover:transform-none hover:bg-gray-100 focus:ring-0 focus:outline-none focus:bg-gray-100 active:bg-gray-100 active:transform-none border-0",
+      "bg-gradient-to-r from-white to-yellow-100 text-gray-600 hover:from-yellow-50 hover:to-yellow-150 focus:ring-yellow-200 shadow-yellow-50",
   };
 
   const widthClass = fullWidth ? "w-full" : "";

@@ -8,13 +8,18 @@ import HomePage from "./pages/HomePage";
 
 import QuestionInterfacePage from "./pages/QuestionInterfacePage";
 import TrackingBoardPage from "./pages/TrackingBoardPage";
+import ProposalsPage from "./pages/ProposalsPage";
 import MatchPreviewPage from "./pages/MatchPreviewPage";
 import ProfilePage from "./pages/ProfilePage";
+import ComponentTestPage from "./pages/ComponentTestPage";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 const App = () => {
   return (
     <Routes>
+      {/* Components Page - completely independent, no layout */}
+      <Route path="/components" element={<ComponentTestPage />} />
+
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Navigate to="/home" replace />} />
 
@@ -30,6 +35,7 @@ const App = () => {
 
           <Route path="/questions" element={<QuestionInterfacePage />} />
           <Route path="/tracking-board" element={<TrackingBoardPage />} />
+          <Route path="/proposals" element={<ProposalsPage />} />
           <Route path="/match-preview" element={<MatchPreviewPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>

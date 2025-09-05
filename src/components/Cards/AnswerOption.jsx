@@ -11,7 +11,7 @@ const AnswerOption = ({ option, index, isSubmitting, onAnswerSubmit }) => {
     <Button
       onClick={handleClick}
       disabled={isSubmitting}
-      variant="secondary"
+      variant="message"
       className="w-full p-6 text-left bg-gray-50 hover:bg-indigo-50 border-2 border-gray-200 hover:border-indigo-300 rounded-xl transition-all duration-200"
     >
       <div className="flex items-center">
