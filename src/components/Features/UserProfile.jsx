@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth.jsx";
+import { useCircleManagement } from "../../hooks/useCircleManagement.js";
 import Card from "../UI/Card";
+import Button from "../UI/Button";
 import { SuccessMessage, ErrorMessage } from "../UI";
 import ProfileHeader from "./ProfileHeader";
 import ProfileWrapper from "./ProfileWrapper";
@@ -10,10 +12,29 @@ import ProfileEditableField from "./ProfileEditableField";
 const UserProfile = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showLeaveConfirmation, setShowLeaveConfirmation] = useState(false);
 
   const { updateProfile } = useAuth();
+  const {
+    handleLeaveCircle,
+    isLeavingCircle,
+    error: circleError,
+    message: circleMessage,
+  } = useCircleManagement();
 
-  const isSuccessMessage = message.includes("successfully");
+  const handleConfirmLeave = async () => {
+    await handleLeaveCircle();
+    setShowLeaveConfirmation(false);
+  };
+
+  const handleCancelLeave = () => {
+    setShowLeaveConfirmation(false);
+  };
+
+  const isSuccessMessage =
+    message.includes("successfully") || circleMessage.includes("successfully");
+  const displayMessage = circleMessage || message;
+  const displayError = circleError;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -22,12 +43,15 @@ const UserProfile = ({ user }) => {
 
         {/* Profile Content */}
         <div className="p-6">
-          {message &&
+          {displayMessage &&
             (isSuccessMessage ? (
-              <SuccessMessage message={message} className="mb-6" />
+              <SuccessMessage message={displayMessage} className="mb-6" />
             ) : (
-              <ErrorMessage message={message} className="mb-6" />
+              <ErrorMessage message={displayMessage} className="mb-6" />
             ))}
+          {displayError && (
+            <ErrorMessage message={displayError} className="mb-6" />
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ProfileWrapper title="Personal Information">
@@ -50,44 +74,6 @@ const UserProfile = ({ user }) => {
                 onCancel={() => setMessage("")}
                 isLoading={isLoading}
               />
-            </ProfileWrapper>
-
-            <ProfileWrapper title="Circle Information">
-              {user.circle ? (
-                <>
-                  <ProfileField label="Circle Name" value={user.circle.name} />
-                  <ProfileField
-                    label="Circle ID"
-                    value={user.circle.id}
-                    className="font-mono text-sm"
-                  />
-                  <ProfileField
-                    label="Role"
-                    value={user.circle.isOwner ? "Owner" : "Member"}
-                  />
-                  <ProfileField
-                    label="Members"
-                    value={user.circle.memberCount}
-                  />
-                  <ProfileField
-                    label="Circle Created"
-                    value={new Date(user.circle.createdAt).toLocaleDateString(
-                      "en-US",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )}
-                  />
-                </>
-              ) : (
-                <ProfileField
-                  label="Circle Membership"
-                  value="Not currently part of any circle"
-                  className="text-amber-600"
-                />
-              )}
             </ProfileWrapper>
 
             <ProfileWrapper title="Account Information">
@@ -120,6 +106,84 @@ const UserProfile = ({ user }) => {
                     : "N/A"
                 }
               />
+            </ProfileWrapper>
+
+            <ProfileWrapper title="Circle Information">
+              {user.circle ? (
+                <>
+                  <ProfileField label="Circle Name" value={user.circle.name} />
+                  <ProfileField
+                    label="Circle ID"
+                    value={user.circle.id}
+                    className="font-mono text-sm"
+                  />
+                  <ProfileField
+                    label="Role"
+                    value={user.circle.isOwner ? "Owner" : "Member"}
+                  />
+                  <ProfileField
+                    label="Members"
+                    value={user.circle.memberCount}
+                  />
+                  <ProfileField
+                    label="Circle Created"
+                    value={new Date(user.circle.createdAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  />
+
+                  {/* Leave Circle Section */}
+                  <div className="pt-4 border-t border-gray-200">
+                    {!showLeaveConfirmation ? (
+                      <Button
+                        onClick={() => setShowLeaveConfirmation(true)}
+                        variant="secondary"
+                        className="w-full bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                      >
+                        Leave Circle
+                      </Button>
+                    ) : (
+                      <div className="space-y-3">
+                        <p className="text-sm text-gray-600">
+                          {user.circle.isOwner
+                            ? "You are the owner. Leaving will transfer ownership to another member."
+                            : "Are you sure you want to leave this circle?"}
+                        </p>
+                        <div className="flex space-x-3">
+                          <Button
+                            onClick={handleConfirmLeave}
+                            loading={isLeavingCircle}
+                            variant="secondary"
+                            className="flex-1 bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                          >
+                            Confirm Leave Circle
+                          </Button>
+                          <Button
+                            onClick={handleCancelLeave}
+                            variant="secondary"
+                            className="flex-1"
+                            disabled={isLeavingCircle}
+                            loading={false}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <ProfileField
+                  label="Circle Membership"
+                  value="Not currently part of any circle"
+                  className="text-amber-600"
+                />
+              )}
             </ProfileWrapper>
           </div>
         </div>

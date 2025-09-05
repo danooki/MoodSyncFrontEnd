@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
-import { getApiErrorMessage, getNetworkErrorMessage } from "../utils/errorUtils.js";
+import {
+  getApiErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 
 export const useCircleManagement = () => {
   const { logout, fetchUserProfile } = useAuth();
@@ -12,9 +15,11 @@ export const useCircleManagement = () => {
   const [error, setError] = useState("");
   const [circleStatus, setCircleStatus] = useState(null);
   const [isLoadingCircle, setIsLoadingCircle] = useState(true);
+  const [isLeavingCircle, setIsLeavingCircle] = useState(false);
   const [circleError, setCircleError] = useState("");
+  const [message, setMessage] = useState("");
 
-  // Check if user is in a circle
+  // Check if user is in a circle via GET.
   const checkCircleStatus = async () => {
     try {
       setIsLoadingCircle(true);
@@ -44,7 +49,9 @@ export const useCircleManagement = () => {
         }
 
         setCircleStatus(null);
-        setCircleError(getApiErrorMessage(data, "Failed to load circle status"));
+        setCircleError(
+          getApiErrorMessage(data, "Failed to load circle status")
+        );
       }
     } catch (error) {
       console.error("Error checking circle status:", error);
@@ -63,6 +70,7 @@ export const useCircleManagement = () => {
     }
   };
 
+  // create a circle via POST.
   const handleCreateCircle = async (e) => {
     e.preventDefault();
     if (!circleName.trim()) {
@@ -101,6 +109,38 @@ export const useCircleManagement = () => {
     }
   };
 
+  // leave a circle via POST (cant use DEL because cant delete owner or circle)
+  const handleLeaveCircle = async () => {
+    setIsLeavingCircle(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${BASE_URL}/user/leave-circle`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ confirm: true }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Refresh the user profile and circle status
+        await fetchUserProfile();
+        await checkCircleStatus();
+        setMessage("Successfully left the circle");
+      } else {
+        const data = await response.json();
+        setError(getApiErrorMessage(data, "Failed to leave circle"));
+      }
+    } catch (err) {
+      setError(getNetworkErrorMessage());
+    } finally {
+      setIsLeavingCircle(false);
+    }
+  };
+
   return {
     circleName,
     setCircleName,
@@ -108,8 +148,11 @@ export const useCircleManagement = () => {
     error,
     circleStatus,
     isLoadingCircle,
+    isLeavingCircle,
     circleError,
+    message,
     checkCircleStatus,
     handleCreateCircle,
+    handleLeaveCircle,
   };
 };
