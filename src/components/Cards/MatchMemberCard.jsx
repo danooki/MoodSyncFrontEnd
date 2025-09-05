@@ -102,7 +102,7 @@ const MatchMemberCard = ({ member, isSinglePersonCircle }) => {
       {member.interestText && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-green-800 mb-3">
-            💚 What You're Looking For
+            What You're Looking For
           </h3>
           <p className="text-green-700">{member.interestText}</p>
         </div>
@@ -111,7 +111,7 @@ const MatchMemberCard = ({ member, isSinglePersonCircle }) => {
       {member.lookingForText && (
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-blue-800 mb-3">
-            🔍 What You're Seeking
+            What You're Seeking
           </h3>
           <p className="text-blue-700">{member.lookingForText}</p>
         </div>

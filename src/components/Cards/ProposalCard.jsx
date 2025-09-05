@@ -7,7 +7,7 @@ import Card from "../UI/Card";
  */
 const ProposalCard = ({ proposal, index }) => {
   const getProposalIcon = (index) => {
-    const icons = ["🌟", "✨", "🎯", "💫"];
+    const icons = ["", "", "", ""];
     return icons[index % icons.length];
   };
 

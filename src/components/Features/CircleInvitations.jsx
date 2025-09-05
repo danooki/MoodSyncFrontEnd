@@ -18,7 +18,7 @@ const CircleInvitations = ({
     <Card className="mb-8">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold text-gray-900">
-          📨 Pending Circle Invitations
+          Pending Circle Invitations
         </h3>
         <Button
           onClick={onRefresh}
@@ -69,7 +69,7 @@ const CircleInvitations = ({
                   onClick={() => onAccept(invitation._id)}
                   variant="success"
                   size="sm"
-                  icon="✅"
+                  icon=""
                 >
                   Accept
                 </Button>
@@ -77,7 +77,7 @@ const CircleInvitations = ({
                   onClick={() => onDecline(invitation._id)}
                   variant="danger"
                   size="sm"
-                  icon="❌"
+                  icon=""
                 >
                   Decline
                 </Button>

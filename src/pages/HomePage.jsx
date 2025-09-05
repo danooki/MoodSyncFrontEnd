@@ -205,7 +205,7 @@ const HomePage = () => {
     <>
       {/* Welcome Header */}
       <PageHeader
-        title={`Welcome back, ${user?.displayName}! 👋`}
+        title={`Welcome back, ${user?.displayName}!`}
         subtitle="Ready to sync your mood with your circle?"
       />
       {/* Pending Invitations */}

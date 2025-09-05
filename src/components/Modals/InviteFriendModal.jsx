@@ -17,7 +17,7 @@ const InviteFriendModal = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="👥 Invite a Friend"
+      title="Invite a Friend"
       size="md"
     >
       <div className="space-y-6">
@@ -60,7 +60,7 @@ const InviteFriendModal = ({
 
         {/* Help text for common issues */}
         <div className="pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500 mb-2">💡 Tips:</p>
+          <p className="text-xs text-gray-500 mb-2">Tips:</p>
           <ul className="text-xs text-gray-500 space-y-1">
             <li>
               • Make sure the display name is exactly as your friend registered

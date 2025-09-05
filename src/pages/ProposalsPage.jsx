@@ -29,24 +29,24 @@ const ProposalsPage = () => {
 
   const getDominantTraitInfo = (trait) => {
     const traitInfo = {
-      D: { name: "Dominant", color: "bg-red-100 text-red-800", emoji: "🔥" },
+      D: { name: "Dominant", color: "bg-red-100 text-red-800", emoji: "" },
       i: {
         name: "Influential",
         color: "bg-yellow-100 text-yellow-800",
-        emoji: "⚡",
+        emoji: "",
       },
-      S: { name: "Steady", color: "bg-green-100 text-green-800", emoji: "🌱" },
+      S: { name: "Steady", color: "bg-green-100 text-green-800", emoji: "" },
       C: {
         name: "Conscientious",
         color: "bg-blue-100 text-blue-800",
-        emoji: "📊",
+        emoji: "",
       },
     };
     return (
       traitInfo[trait] || {
         name: "Unknown",
         color: "bg-gray-100 text-gray-800",
-        emoji: "❓",
+        emoji: "",
       }
     );
   };
@@ -92,7 +92,7 @@ const ProposalsPage = () => {
     <>
       {/* Header */}
       <PageHeader
-        title="🌙 Evening Proposals"
+        title="Evening Proposals"
         subtitle="Personalized activity suggestions based on your circle's mood today"
       />
 
