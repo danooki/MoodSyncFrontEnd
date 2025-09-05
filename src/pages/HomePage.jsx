@@ -9,6 +9,8 @@ import {
   getNetworkErrorMessage,
 } from "../utils/errorUtils.js";
 import CircleStatusCard from "../components/Cards/CircleStatusCard.jsx";
+import CircleChoiceCard from "../components/Cards/CircleChoiceCard.jsx";
+import CircleWaitingCard from "../components/Cards/CircleWaitingCard.jsx";
 import CircleInvitations from "../components/Features/CircleInvitations.jsx";
 import InviteFriendModal from "../components/Modals/InviteFriendModal.jsx";
 import { PageHeader } from "../components/UI";
@@ -48,6 +50,9 @@ const HomePage = () => {
   // Simple invitations state
   const [circleInvitations, setCircleInvitations] = useState([]);
   const [isLoadingInvitations, setIsLoadingInvitations] = useState(false);
+
+  // Circle choice state button: null, waiting or create anyway.
+  const [circleChoice, setCircleChoice] = useState(null); // null, 'waiting', or 'creating'
 
   // Simple function to fetch invitations
   const fetchCircleInvitationsData = async () => {
@@ -158,12 +163,32 @@ const HomePage = () => {
     setInviteDisplayName("");
   };
 
+  // Circle choice handlers
+  const handleWaitingForInvite = () => {
+    setCircleChoice("waiting");
+  };
+
+  const handleCreateCircleChoice = () => {
+    setCircleChoice("creating");
+  };
+
+  const handleChangeMind = () => {
+    setCircleChoice(null); // Reset to show choice again
+  };
+
   // Load data on component mount
   useEffect(() => {
     checkCircleStatus();
     fetchCircleInvitationsData();
     checkDailyScore();
   }, []);
+
+  // Reset circle choice when user joins a circle
+  useEffect(() => {
+    if (circleStatus?.isInCircle) {
+      setCircleChoice(null);
+    }
+  }, [circleStatus?.isInCircle]);
 
   const handleStartQuestions = () => {
     // Check if all questions are already answered
@@ -176,7 +201,6 @@ const HomePage = () => {
     }
   };
 
-
   return (
     <>
       {/* Welcome Header */}
@@ -184,23 +208,6 @@ const HomePage = () => {
         title={`Welcome back, ${user?.displayName}! 👋`}
         subtitle="Ready to sync your mood with your circle?"
       />
-
-      {/* Circle Status Card */}
-      <CircleStatusCard
-        user={user}
-        circleStatus={circleStatus}
-        isLoading={isLoadingCircle}
-        error={circleError}
-        onCreateCircle={handleCreateCircle}
-        onInviteFriend={handleInviteFriendClick}
-        onStartQuestions={handleStartQuestions}
-        hasAnsweredAllQuestions={hasAnsweredAllQuestions}
-        dailyScoreDate={dailyScoreDate}
-        circleName={circleName}
-        setCircleName={setCircleName}
-        isCreatingCircle={isCreatingCircle}
-      />
-
       {/* Pending Invitations */}
       <CircleInvitations
         invitations={circleInvitations}
@@ -209,6 +216,54 @@ const HomePage = () => {
         onAccept={handleAcceptInvite}
         onDecline={handleDeclineInvite}
       />
+      {/* Circle Status Card */}
+      {circleStatus?.isInCircle ? (
+        <CircleStatusCard
+          user={user}
+          circleStatus={circleStatus}
+          isLoading={isLoadingCircle}
+          error={circleError}
+          onCreateCircle={handleCreateCircle}
+          onInviteFriend={handleInviteFriendClick}
+          onStartQuestions={handleStartQuestions}
+          hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+          dailyScoreDate={dailyScoreDate}
+          circleName={circleName}
+          setCircleName={setCircleName}
+          isCreatingCircle={isCreatingCircle}
+        />
+      ) : (
+        // Show choice flow when user has no circle
+        <>
+          {circleChoice === null && (
+            <CircleChoiceCard
+              onWaitingForInvite={handleWaitingForInvite}
+              onCreateCircle={handleCreateCircleChoice}
+            />
+          )}
+
+          {circleChoice === "waiting" && (
+            <CircleWaitingCard onChangeMind={handleChangeMind} user={user} />
+          )}
+
+          {circleChoice === "creating" && (
+            <CircleStatusCard
+              user={user}
+              circleStatus={circleStatus}
+              isLoading={isLoadingCircle}
+              error={circleError}
+              onCreateCircle={handleCreateCircle}
+              onInviteFriend={handleInviteFriendClick}
+              onStartQuestions={handleStartQuestions}
+              hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+              dailyScoreDate={dailyScoreDate}
+              circleName={circleName}
+              setCircleName={setCircleName}
+              isCreatingCircle={isCreatingCircle}
+            />
+          )}
+        </>
+      )}
 
       {/* Invite Friend Modal */}
       <InviteFriendModal
