@@ -1,9 +1,6 @@
 import React from "react";
 
-/**
- * Reusable Input component with consistent styling and validation states
- * Supports different input types and error states
- */
+// this component is consistent for all inputs (text, email, password, etc.) across the app.
 const Input = ({
   type = "text",
   label,
