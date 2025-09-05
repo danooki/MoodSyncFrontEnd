@@ -1,69 +1,24 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth.jsx";
 import Card from "../UI/Card";
-import Button from "../UI/Button";
-import Input from "../UI/Input";
-import SectionHeader from "../UI/SectionHeader";
 import { SuccessMessage, ErrorMessage } from "../UI";
+import ProfileHeader from "./ProfileHeader";
+import ProfileWrapper from "./ProfileWrapper";
+import ProfileField from "./ProfileField";
+import ProfileEditableField from "./ProfileEditableField";
 
 const UserProfile = ({ user }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState({
-    email: user.email || "",
-  });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleEditChange = (e) => {
-    setEditForm({
-      ...editForm,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const { updateProfile } = useAuth();
-
-  const handleSave = async () => {
-    setIsLoading(true);
-    setMessage("");
-
-    const result = await updateProfile(editForm);
-
-    if (result.success) {
-      setMessage("Profile updated successfully!");
-      setIsEditing(false);
-    } else {
-      setMessage(result.message);
-    }
-
-    setIsLoading(false);
-  };
-
-  const handleCancel = () => {
-    setEditForm({
-      email: user.email || "",
-    });
-    setIsEditing(false);
-    setMessage("");
-  };
 
   const isSuccessMessage = message.includes("successfully");
 
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-8 text-white">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-2xl font-bold">
-              U
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">User Profile</h1>
-              <p className="text-indigo-100">Welcome to MoodSync</p>
-            </div>
-          </div>
-        </div>
+        <ProfileHeader userInitial="U" />
 
         {/* Profile Content */}
         <div className="p-6">
@@ -75,183 +30,97 @@ const UserProfile = ({ user }) => {
             ))}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Personal Information */}
-            <div className="space-y-4">
-              <div className="border-b border-gray-200 pb-3">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Personal Information
-                </h3>
-              </div>
-              <div className="space-y-4">
-                {isEditing ? (
-                  <div className="space-y-4">
-                    <Input
-                      type="email"
-                      label="Email"
-                      name="email"
-                      value={editForm.email}
-                      onChange={handleEditChange}
-                      required
-                    />
+            <ProfileWrapper title="Personal Information">
+              <ProfileEditableField
+                label="Email"
+                value={user.email}
+                type="email"
+                onSave={async (newValue) => {
+                  setIsLoading(true);
+                  setMessage("");
+                  const result = await updateProfile({ email: newValue });
+                  if (result.success) {
+                    setMessage("Profile updated successfully!");
+                  } else {
+                    setMessage(result.message);
+                  }
+                  setIsLoading(false);
+                  return result;
+                }}
+                onCancel={() => setMessage("")}
+                isLoading={isLoading}
+              />
+            </ProfileWrapper>
 
-                    <div className="flex space-x-3">
-                      <Button
-                        onClick={handleSave}
-                        loading={isLoading}
-                        disabled={isLoading}
-                        variant="primary"
-                        className="flex-1"
-                      >
-                        Save Changes
-                      </Button>
-                      <Button
-                        onClick={handleCancel}
-                        variant="secondary"
-                        className="flex-1"
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Email
-                      </span>
-                      <p className="text-gray-900">{user.email}</p>
-                    </div>
+            <ProfileWrapper title="Circle Information">
+              {user.circle ? (
+                <>
+                  <ProfileField label="Circle Name" value={user.circle.name} />
+                  <ProfileField
+                    label="Circle ID"
+                    value={user.circle.id}
+                    className="font-mono text-sm"
+                  />
+                  <ProfileField
+                    label="Role"
+                    value={user.circle.isOwner ? "Owner" : "Member"}
+                  />
+                  <ProfileField
+                    label="Members"
+                    value={user.circle.memberCount}
+                  />
+                  <ProfileField
+                    label="Circle Created"
+                    value={new Date(user.circle.createdAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  />
+                </>
+              ) : (
+                <ProfileField
+                  label="Circle Membership"
+                  value="Not currently part of any circle"
+                  className="text-amber-600"
+                />
+              )}
+            </ProfileWrapper>
 
-                    <Button
-                      onClick={() => setIsEditing(true)}
-                      variant="primary"
-                    >
-                      Edit Profile
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Circle Information */}
-            <div className="space-y-4">
-              <div className="border-b border-gray-200 pb-3">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Circle Information
-                </h3>
-              </div>
-              <div className="space-y-4">
-                {user.circle ? (
-                  <>
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Circle Name
-                      </span>
-                      <p className="text-gray-900">{user.circle.name}</p>
-                    </div>
-
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Circle ID
-                      </span>
-                      <p className="text-gray-900 font-mono text-sm">
-                        {user.circle.id}
-                      </p>
-                    </div>
-
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Role
-                      </span>
-                      <p className="text-gray-900">
-                        {user.circle.isOwner ? "Owner" : "Member"}
-                      </p>
-                    </div>
-
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Members
-                      </span>
-                      <p className="text-gray-900">{user.circle.memberCount}</p>
-                    </div>
-
-                    <div>
-                      <span className="text-sm font-medium text-gray-500">
-                        Circle Created
-                      </span>
-                      <p className="text-gray-900">
-                        {new Date(user.circle.createdAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )}
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <div>
-                    <span className="text-sm font-medium text-gray-500">
-                      Circle Membership
-                    </span>
-                    <p className="text-amber-600">
-                      Not currently part of any circle
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Account Information */}
-            <div className="space-y-4">
-              <div className="border-b border-gray-200 pb-3">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Account Information
-                </h3>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    User ID
-                  </span>
-                  <p className="text-gray-900 font-mono text-sm">
-                    {user.id || "N/A"}
-                  </p>
-                </div>
-
-                <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    Member Since
-                  </span>
-                  <p className="text-gray-900">
-                    {user.createdAt
-                      ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                      : "N/A"}
-                  </p>
-                </div>
-
-                <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    Last Updated
-                  </span>
-                  <p className="text-gray-900">
-                    {user.updatedAt
-                      ? new Date(user.updatedAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                      : "N/A"}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <ProfileWrapper title="Account Information">
+              <ProfileField
+                label="User ID"
+                value={user.id || "N/A"}
+                className="font-mono text-sm"
+              />
+              <ProfileField
+                label="Member Since"
+                value={
+                  user.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : "N/A"
+                }
+              />
+              <ProfileField
+                label="Last Updated"
+                value={
+                  user.updatedAt
+                    ? new Date(user.updatedAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : "N/A"
+                }
+              />
+            </ProfileWrapper>
           </div>
         </div>
       </Card>
