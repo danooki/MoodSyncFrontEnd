@@ -64,6 +64,10 @@ const MatchPreviewPage = () => {
     navigate("/home");
   };
 
+  const handleViewProposals = () => {
+    navigate("/proposals");
+  };
+
   if (isLoading) {
     return <LoadingPage text="Loading match preview..." />;
   }
@@ -119,8 +123,18 @@ const MatchPreviewPage = () => {
       <div className="text-center mt-12 space-y-4">
         <div className="space-x-4">
           <Button
+            onClick={handleViewProposals}
+            variant="success"
+            size="lg"
+            icon="🌙"
+          >
+            View Evening Proposals
+          </Button>
+        </div>
+        <div className="space-x-4">
+          <Button
             onClick={handleBackToTrackingBoard}
-            variant="primary"
+            variant="secondary"
             icon="←"
           >
             Back to Tracking Board

@@ -193,20 +193,29 @@ const TrackingBoardPage = () => {
       {/* Action Buttons */}
       <div className="text-center space-y-4">
         {trackingBoard && trackingBoard.allCompleted && (
-          <Button
-            onClick={handleViewMatchPreview}
-            variant="success"
-            size="lg"
-            icon="🎯"
-          >
-            View Match Preview
-          </Button>
+          <div className="space-y-4">
+            <Button
+              onClick={handleViewMatchPreview}
+              variant="primary"
+              size="lg"
+              icon="🎯"
+            >
+              View Match Preview
+            </Button>
+            <div>
+              <Button onClick={handleBackToHome} variant="secondary" icon="←">
+                Back to Home
+              </Button>
+            </div>
+          </div>
         )}
-        <div>
-          <Button onClick={handleBackToHome} variant="primary" icon="←">
-            Back to Home
-          </Button>
-        </div>
+        {(!trackingBoard || !trackingBoard.allCompleted) && (
+          <div>
+            <Button onClick={handleBackToHome} variant="primary" icon="←">
+              Back to Home
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );
