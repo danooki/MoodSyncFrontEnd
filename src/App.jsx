@@ -21,7 +21,7 @@ const App = () => {
       <Route path="/components" element={<ComponentTestPage />} />
 
       <Route path="/" element={<RootLayout />}>
-        <Route index element={<Navigate to="/home" replace />} />
+        <Route index element={<Navigate to="/home" />} />
 
         {/* Auth routes */}
         <Route element={<AuthLayout />}>
