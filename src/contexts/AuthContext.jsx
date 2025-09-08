@@ -1,6 +1,10 @@
 import React, { useState, useEffect, createContext } from "react";
 import { BASE_URL } from "../config/api.js";
-import { getLoginErrorMessage, getRegistrationErrorMessage, getNetworkErrorMessage } from "../utils/errorUtils.js";
+import {
+  getLoginErrorMessage,
+  getRegistrationErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 
 export const AuthContext = createContext();
 

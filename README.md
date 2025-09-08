@@ -1,6 +1,6 @@
 # MoodSync Frontend
 
-A responsive mobile-first React application for the MoodSyncAPI.
+A responsive mobile-first React application for the MoodSyncAPI, made on JavaScript + React.
 
 ## Features
 
@@ -10,10 +10,11 @@ A responsive mobile-first React application for the MoodSyncAPI.
 - Progress tracking
 - User profile management
 - Match preview functionality
+- hardProposals (not AI generated)
 
 **In Development:**
 
-- hardProposals
+- Phone view
 - Performance optimizations
 - User Settings
 - Final desing overhaul: enhance components
@@ -83,25 +84,25 @@ src/
 
 - Any invalid path → redirects to `/login` (unauthenticated) or `/home` (authenticated)
 
-## Development Guidelines
+## Development
 
 ### Code Organization
 
-1. **Keep files under 200 lines** for maintainability
-2. **Separate business logic** into custom hooks
+1. **Keeping files under 200 lines** for maintainability
+2. **Separated logic** into custom hooks
 3. **Extract reusable UI patterns** into UI/ components
 4. **Use descriptive component names** that indicate their purpose
 
 ### Folder Architecture
 
 - **UI Components**: Place in `src/components/UI/` if pure presentational
-- **Business Components**: Place in `src/components/` if containing business logic
+- **Logic Components**: Place in `src/components/` if containing business logic
 - **Custom Hooks**: Place in `src/hooks/` for reusable business logic
 - **Pages**: Place in `src/pages/` for route-specific components
 
 ### Best Practices
 
-- Full Javascript + React
-- Implement proper error boundaries and loading states
-- Follow established naming conventions
-- Test components in isolation when possible
+- Javascript + React
+- Implemented error boundaries and loading states
+- Established naming conventions
+- Tested components in isolation
