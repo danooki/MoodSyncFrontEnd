@@ -1,6 +1,7 @@
 # MoodSync Frontend
 
-A responsive mobile-first React application for the MoodSyncAPI, made on JavaScript + React.
+MoodSync is a WebApp that allows you and your friends to identify your mood and plan an evening based on it.
+A responsive browser + mobile React application made on JavaScript + React.
 
 ## Features
 
