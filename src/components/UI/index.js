@@ -6,6 +6,7 @@ export { default as Modal } from "./Modal";
 export { default as SectionHeader } from "./SectionHeader";
 export { default as BackgroundWrapper } from "./BackgroundWrapper";
 export { default as Avatar } from "./Avatar";
+export { default as TraitBadge } from "./TraitBadge";
 
 // Form Components
 // Form components removed - using simple inline components instead

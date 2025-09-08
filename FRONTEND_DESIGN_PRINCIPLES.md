@@ -24,7 +24,7 @@ _Keep it simple, readable and modular_
 - `useEffect` - for data fetching
 - `onSubmit` - for forms
 
-### **Hooks to Avoid**
+### **Avoid**
 
 - `useCallback`, `useMemo`, `useRef`, `useReducer`
 

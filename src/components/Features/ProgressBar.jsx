@@ -1,3 +1,4 @@
+
 const ProgressBar = ({ progress, totalQuestions }) => {
   return (
     <div className="mb-8">

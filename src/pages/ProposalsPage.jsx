@@ -11,6 +11,7 @@ import {
 } from "../components/UI";
 import Avatar from "../components/UI/Avatar.jsx";
 import ProposalCard from "../components/Cards/ProposalCard.jsx";
+import ProgressBanner from "../components/Features/ProgressBanner.jsx";
 
 /**
  * ProposalsPage - displays personalized activity suggestions based on circle mood
@@ -29,23 +30,31 @@ const ProposalsPage = () => {
 
   const getDominantTraitInfo = (trait) => {
     const traitInfo = {
-      D: { name: "Dominant", color: "bg-red-100 text-red-800", emoji: "" },
-      i: {
-        name: "Influential",
-        color: "bg-yellow-100 text-yellow-800",
+      D: {
+        name: "Dominant",
+        color: "bg-red-500 text-white",
         emoji: "",
       },
-      S: { name: "Steady", color: "bg-green-100 text-green-800", emoji: "" },
+      i: {
+        name: "Influential",
+        color: "bg-yellow-500 text-white",
+        emoji: "",
+      },
+      S: {
+        name: "Steady",
+        color: "bg-green-500 text-white",
+        emoji: "",
+      },
       C: {
         name: "Conscientious",
-        color: "bg-blue-100 text-blue-800",
+        color: "bg-blue-500 text-white",
         emoji: "",
       },
     };
     return (
       traitInfo[trait] || {
         name: "Unknown",
-        color: "bg-gray-100 text-gray-800",
+        color: "bg-gray-500 text-white",
         emoji: "",
       }
     );
@@ -96,6 +105,9 @@ const ProposalsPage = () => {
         subtitle="Personalized activity suggestions based on your circle's mood today"
       />
 
+      {/* Progress Banner */}
+      <ProgressBanner currentStage="proposals" userHasCircle={true} />
+
       {/* Circle Information Card */}
       <Card className="mb-8">
         <div className="text-center mb-6">
@@ -138,18 +150,6 @@ const ProposalsPage = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* Circle Mood Summary */}
-        <div className="text-center">
-          <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full">
-            <span className="text-sm font-medium text-gray-700">
-              Today's Circle Mood:{" "}
-              {circleMembers
-                .map((m) => getDominantTraitInfo(m.dominant).emoji)
-                .join(" ")}
-            </span>
-          </div>
         </div>
       </Card>
 

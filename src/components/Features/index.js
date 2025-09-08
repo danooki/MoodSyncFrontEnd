@@ -2,6 +2,7 @@
 export { default as CircleInvitations } from "./CircleInvitations.jsx";
 export { default as UserProfile } from "./UserProfile.jsx";
 export { default as ProgressBar } from "./ProgressBar.jsx";
+export { default as ProgressBanner } from "./ProgressBanner.jsx";
 
 // Profile components
 export { default as ProfileHeader } from "./ProfileHeader.jsx";

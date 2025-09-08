@@ -8,6 +8,7 @@ import useQuestionStatus from "../hooks/useQuestionStatus.js";
 import useQuestionProgress from "../hooks/useQuestionProgress.js";
 // Components
 import ProgressBar from "../components/Features/ProgressBar.jsx";
+import ProgressBanner from "../components/Features/ProgressBanner.jsx";
 import QuestionCard from "../components/Cards/QuestionCard.jsx";
 import { Button, Card, LoadingPage } from "../components/UI";
 
@@ -122,6 +123,9 @@ const QuestionInterfacePage = () => {
 
   return (
     <>
+      {/* Progress Banner */}
+      <ProgressBanner currentStage="questions" userHasCircle={true} />
+
       {/* Progress Bar */}
       <ProgressBar progress={progress} totalQuestions={totalQuestions} />
 

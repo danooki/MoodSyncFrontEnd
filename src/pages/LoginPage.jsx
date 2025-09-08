@@ -93,7 +93,7 @@ const LoginPage = () => {
                 Don't have an account?{" "}
                 <Link
                   to="/register"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-indigo-600 hover:text-indigo-700"
                 >
                   Sign up here
                 </Link>

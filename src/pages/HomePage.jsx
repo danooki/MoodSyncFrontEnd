@@ -13,6 +13,7 @@ import CircleChoiceCard from "../components/Cards/CircleChoiceCard.jsx";
 import CircleWaitingCard from "../components/Cards/CircleWaitingCard.jsx";
 import CircleInvitations from "../components/Features/CircleInvitations.jsx";
 import InviteFriendModal from "../components/Modals/InviteFriendModal.jsx";
+import ProgressBanner from "../components/Features/ProgressBanner.jsx";
 import { PageHeader } from "../components/UI";
 
 const HomePage = () => {
@@ -207,6 +208,12 @@ const HomePage = () => {
       <PageHeader
         title={`Welcome back, ${user?.displayName}!`}
         subtitle="Ready to sync your mood with your circle?"
+      />
+
+      {/* Progress Banner */}
+      <ProgressBanner
+        currentStage={circleStatus?.isInCircle ? "circle" : "circle"}
+        userHasCircle={circleStatus?.isInCircle}
       />
       {/* Pending Invitations */}
       <CircleInvitations
