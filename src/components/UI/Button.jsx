@@ -2,6 +2,7 @@ import React from "react";
 
 /**
  * Reusable Button component with consistent styling and variants
+ * Available variants: primary, secondary, danger, info, message
  * Handles loading states, disabled states, and different button types
  */
 const Button = ({
@@ -28,16 +29,14 @@ const Button = ({
 
   const variantClasses = {
     primary:
-      "bg-gradient-to-r from-green-500 to-green-800 text-white hover:from-green-600 hover:to-green-900 focus:ring-green-500 shadow-green-200",
+      "text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg",
     secondary:
-      "bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 focus:ring-purple-400 shadow-purple-200",
-    success:
-      "bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 focus:ring-green-500 shadow-green-200",
+      "text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg",
     danger:
-      "bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 focus:ring-red-500 shadow-red-200",
+      "text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg",
     info: "bg-gradient-to-r from-white to-pink-100 text-gray-600 hover:from-pink-50 hover:to-pink-150 focus:ring-pink-200 shadow-pink-50",
     message:
-      "bg-gradient-to-r from-white to-yellow-100 text-gray-600 hover:from-yellow-50 hover:to-yellow-150 focus:ring-yellow-200 shadow-yellow-50",
+      "bg-gradient-to-r from-white to-gray-100 text-gray-600 hover:from-gray-50 hover:to-gray-150 focus:ring-gray-200 shadow-gray-50",
   };
 
   const widthClass = fullWidth ? "w-full" : "";

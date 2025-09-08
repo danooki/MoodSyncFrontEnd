@@ -32,7 +32,7 @@ const CircleWaitingCard = ({ onChangeMind, user }) => {
           </div>
         </div>
 
-        <Button onClick={onChangeMind} variant="info" fullWidth>
+        <Button onClick={onChangeMind} variant="secondary" fullWidth>
           Change my mind - I want to create a circle instead
         </Button>
       </div>

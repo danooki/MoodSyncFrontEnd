@@ -142,8 +142,8 @@ const UserProfile = ({ user }) => {
                     {!showLeaveConfirmation ? (
                       <Button
                         onClick={() => setShowLeaveConfirmation(true)}
-                        variant="secondary"
-                        className="w-full bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                        variant="danger"
+                        className="w-full"
                       >
                         Leave Circle
                       </Button>
@@ -158,8 +158,8 @@ const UserProfile = ({ user }) => {
                           <Button
                             onClick={handleConfirmLeave}
                             loading={isLeavingCircle}
-                            variant="secondary"
-                            className="flex-1 bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                            variant="danger"
+                            className="flex-1"
                           >
                             Confirm Leave Circle
                           </Button>

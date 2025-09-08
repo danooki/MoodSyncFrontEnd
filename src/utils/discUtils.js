@@ -1,16 +1,32 @@
+
 // DISC utility functions for trait display and styling
 export const getTraitColor = (trait) => {
   switch (trait) {
     case "D":
-      return "bg-red-100 text-red-800 border-red-200";
+      return "bg-red-500 text-white border-red-200";
     case "i":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      return "bg-yellow-500 text-white border-gray-200";
     case "S":
-      return "bg-green-100 text-green-800 border-green-200";
+      return "bg-green-500 text-white border-green-200";
     case "C":
-      return "bg-blue-100 text-blue-800 border-blue-200";
+      return "bg-blue-500 text-white border-blue-200";
     default:
-      return "bg-gray-100 text-gray-800 border-gray-200";
+      return "bg-gray-500 text-white border-gray-200";
+  }
+};
+
+export const getTraitGradient = (trait) => {
+  switch (trait) {
+    case "D":
+      return "bg-gradient-to-br from-red-500 to-red-600";
+    case "i":
+      return "bg-gradient-to-br from-yellow-400 to-orange-500";
+    case "S":
+      return "bg-gradient-to-br from-green-500 to-emerald-600";
+    case "C":
+      return "bg-gradient-to-br from-blue-500 to-indigo-600";
+    default:
+      return "bg-gradient-to-br from-gray-500 to-gray-600";
   }
 };
 

@@ -10,6 +10,7 @@ import {
   LoadingPage,
   ErrorPage,
 } from "../components/UI";
+import ProgressBanner from "../components/Features/ProgressBanner.jsx";
 import {
   getApiErrorMessage,
   getNetworkErrorMessage,
@@ -108,6 +109,9 @@ const MatchPreviewPage = () => {
         subtitle="Discover your circle's daily DISC personality traits and compatibility"
       />
 
+      {/* Progress Banner */}
+      <ProgressBanner currentStage="match" userHasCircle={true} />
+
       {/* Circle Members with DISC Traits */}
       <div className="space-y-6">
         {matchPreview.circleMembers.map((member) => (
@@ -124,7 +128,7 @@ const MatchPreviewPage = () => {
         <div className="space-x-4">
           <Button
             onClick={handleViewProposals}
-            variant="success"
+            variant="primary"
             size="lg"
             icon=""
           >

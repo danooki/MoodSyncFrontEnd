@@ -61,7 +61,8 @@ const CircleStatusCard = ({
         icon: "",
         text: "View your Board",
         onClick: onStartQuestions,
-        variant: "success",
+        variant: "primary",
+        size: "lg",
       });
     } else {
       buttons.push({
@@ -69,6 +70,7 @@ const CircleStatusCard = ({
         text: "Start Questions",
         onClick: onStartQuestions,
         variant: "primary",
+        size: "lg",
       });
     }
 
@@ -78,7 +80,7 @@ const CircleStatusCard = ({
         icon: "",
         text: "Invite a Friend",
         onClick: onInviteFriend,
-        variant: "default",
+        variant: "secondary",
       });
     }
 

@@ -13,25 +13,17 @@ const CircleChoiceCard = ({ onWaitingForInvite, onCreateCircle }) => {
     >
       <div className="space-y-4">
         <div className="text-center text-gray-600 text-sm mb-6">
-          A circle is a group of friends who sync their moods together. You can either wait for a friend to invite you, or create your own circle and invite others.
+          A circle is a group of friends who sync their moods together. You can
+          either wait for a friend to invite you, or create your own circle and
+          invite others.
         </div>
-        
+
         <div className="space-y-3">
-          <Button
-            onClick={onWaitingForInvite}
-            variant="default"
-            fullWidth
-            icon=""
-          >
+          <Button onClick={onWaitingForInvite} variant="info" fullWidth icon="">
             I'm waiting for an invitation to join a Circle
           </Button>
-          
-          <Button
-            onClick={onCreateCircle}
-            variant="primary"
-            fullWidth
-            icon=""
-          >
+
+          <Button onClick={onCreateCircle} variant="primary" fullWidth icon="">
             I'm not waiting, I want to create my own Circle
           </Button>
         </div>

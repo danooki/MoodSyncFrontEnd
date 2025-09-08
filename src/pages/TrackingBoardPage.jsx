@@ -11,6 +11,7 @@ import {
   ErrorPage,
 } from "../components/UI";
 import Avatar from "../components/UI/Avatar.jsx";
+import ProgressBanner from "../components/Features/ProgressBanner.jsx";
 import {
   getApiErrorMessage,
   getNetworkErrorMessage,
@@ -126,6 +127,9 @@ const TrackingBoardPage = () => {
         title="Tracking Board"
         subtitle="See how your circle is doing with daily mood assessments"
       />
+
+      {/* Progress Banner */}
+      <ProgressBanner currentStage="tracking" userHasCircle={true} />
 
       {/* Circle Info */}
       {trackingBoard && (

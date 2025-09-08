@@ -67,7 +67,7 @@ const CircleInvitations = ({
               <div className="flex space-x-2">
                 <Button
                   onClick={() => onAccept(invitation._id)}
-                  variant="success"
+                  variant="primary"
                   size="sm"
                   icon=""
                 >

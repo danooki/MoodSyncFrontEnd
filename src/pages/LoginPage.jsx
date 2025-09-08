@@ -47,9 +47,11 @@ const LoginPage = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome Back
+            MoodSync WebApp
           </h1>
-          <p className="text-gray-600">Sign in to your MoodSync account</p>
+          <p className="text-gray-600">
+            Sign in to sync your Mood and find a common evening plan
+          </p>
         </div>
 
         <Card className="p-6 sm:p-8">
@@ -93,7 +95,7 @@ const LoginPage = () => {
                 Don't have an account?{" "}
                 <Link
                   to="/register"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-indigo-600 hover:text-indigo-700"
                 >
                   Sign up here
                 </Link>

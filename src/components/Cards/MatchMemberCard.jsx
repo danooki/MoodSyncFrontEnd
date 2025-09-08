@@ -1,9 +1,9 @@
 import {
-  getTraitColor,
   getTraitName,
   getTraitDescription,
 } from "../../utils/discUtils";
 import Avatar from "../UI/Avatar";
+import TraitBadge from "../UI/TraitBadge";
 
 const MatchMemberCard = ({ member, isSinglePersonCircle }) => {
   return (
@@ -35,16 +35,11 @@ const MatchMemberCard = ({ member, isSinglePersonCircle }) => {
           </h3>
           {member.dailyDominantTrait ? (
             <div className="space-y-3">
-              <div
-                className={`inline-flex items-center px-3 py-2 rounded-lg border-2 font-bold text-lg ${getTraitColor(
-                  member.dailyDominantTrait
-                )}`}
-              >
-                {member.dailyDominantTrait}
-              </div>
-              <h4 className="font-medium text-gray-900">
-                {getTraitName(member.dailyDominantTrait)}
-              </h4>
+              <TraitBadge 
+                trait={member.dailyDominantTrait} 
+                size="lg" 
+                showLabel={true}
+              />
               <p className="text-gray-600 text-sm">
                 {getTraitDescription(member.dailyDominantTrait)}
               </p>
@@ -78,16 +73,11 @@ const MatchMemberCard = ({ member, isSinglePersonCircle }) => {
           </h3>
           {member.dailySecondaryTrait ? (
             <div className="space-y-3">
-              <div
-                className={`inline-flex items-center px-3 py-2 rounded-lg border-2 font-bold text-lg ${getTraitColor(
-                  member.dailySecondaryTrait
-                )}`}
-              >
-                {member.dailySecondaryTrait}
-              </div>
-              <h4 className="font-medium text-gray-900">
-                {getTraitName(member.dailySecondaryTrait)}
-              </h4>
+              <TraitBadge 
+                trait={member.dailySecondaryTrait} 
+                size="lg" 
+                showLabel={true}
+              />
               <p className="text-gray-600 text-sm">
                 {getTraitDescription(member.dailySecondaryTrait)}
               </p>
