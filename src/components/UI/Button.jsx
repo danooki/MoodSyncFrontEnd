@@ -2,6 +2,7 @@ import React from "react";
 
 /**
  * Reusable Button component with consistent styling and variants
+ * Available variants: primary, secondary, danger, info, message
  * Handles loading states, disabled states, and different button types
  */
 const Button = ({
@@ -31,8 +32,6 @@ const Button = ({
       "text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg",
     secondary:
       "text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg",
-    success:
-      "text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg",
     danger:
       "text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg",
     info: "bg-gradient-to-r from-white to-pink-100 text-gray-600 hover:from-pink-50 hover:to-pink-150 focus:ring-pink-200 shadow-pink-50",

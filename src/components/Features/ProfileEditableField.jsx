@@ -72,9 +72,9 @@ const ProfileEditableField = ({
       </div>
       <Button
         onClick={() => setIsEditing(true)}
-        variant="primary"
+        variant="secondary"
       >
-        Edit Profile
+        Modify Email
       </Button>
     </div>
   );

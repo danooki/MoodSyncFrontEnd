@@ -90,17 +90,6 @@ const ComponentTestPage = () => {
               </div>
 
               <div className="space-y-3">
-                <h3 className="font-medium text-gray-700">Primary (Success)</h3>
-                <Button variant="primary">Primary Button</Button>
-                <Button variant="primary" loading>
-                  Loading
-                </Button>
-                <Button variant="primary" disabled>
-                  Disabled
-                </Button>
-              </div>
-
-              <div className="space-y-3">
                 <h3 className="font-medium text-gray-700">Danger</h3>
                 <Button variant="danger">Danger Button</Button>
                 <Button variant="danger" loading>

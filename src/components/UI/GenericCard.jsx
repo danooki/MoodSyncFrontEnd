@@ -36,6 +36,7 @@ const GenericCard = ({
                 onClick={button.onClick}
                 disabled={button.disabled}
                 variant={button.variant}
+                size={button.size}
                 fullWidth
                 icon={button.icon}
               >
