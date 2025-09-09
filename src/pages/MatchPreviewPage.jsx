@@ -17,7 +17,7 @@ import {
 } from "../utils/errorUtils.js";
 
 const MatchPreviewPage = () => {
-  const { user } = useAuth();
+  const { user, getToken, logout } = useAuth();
   const navigate = useNavigate();
   const [matchPreview, setMatchPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,13 +28,21 @@ const MatchPreviewPage = () => {
   }, []);
 
   const fetchMatchPreview = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     try {
       setIsLoading(true);
       setError("");
       const response = await fetch(`${BASE_URL}/match/preview`, {
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

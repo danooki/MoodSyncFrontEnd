@@ -12,15 +12,37 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Helper function to get token from localStorage
+  const getToken = () => {
+    return localStorage.getItem("moodsync_token");
+  };
+
+  // Helper function to set token in localStorage
+  const setToken = (token) => {
+    localStorage.setItem("moodsync_token", token);
+  };
+
+  // Helper function to remove token from localStorage
+  const removeToken = () => {
+    localStorage.removeItem("moodsync_token");
+  };
+
   const fetchUserProfile = async () => {
-    // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
-    // The backend will reject the request if the cookie is invalid
+    const token = getToken();
+
+    // If no token, user is not authenticated
+    if (!token) {
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await fetch(`${BASE_URL}/user/me`, {
-        credentials: "include", // This is crucial for sending cookies
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -34,19 +56,21 @@ export const AuthProvider = ({ children }) => {
         };
         setUser(userWithCircle);
       } else {
-        // If the request fails, user is not authenticated
+        // If the request fails, token might be invalid
+        removeToken();
         setUser(null);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
+      removeToken();
       setUser(null);
     } finally {
       setIsLoading(false);
     }
-  }; // Check if user is already logged in on app load
+  };
+
+  // Check if user is already logged in on app load
   useEffect(() => {
-    // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
-    // The backend will reject the request if the cookie is invalid
     fetchUserProfile();
   }, []);
 
@@ -54,7 +78,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${BASE_URL}/auth/signin`, {
         method: "POST",
-        credentials: "include", // This is crucial for receiving cookies
         headers: {
           "Content-Type": "application/json",
         },
@@ -64,7 +87,9 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Backend returns user data and sets HTTP-only cookie
+        // Store token in localStorage
+        setToken(data.token);
+
         // Use the user data from login response directly
         const userWithCircle = {
           ...data.user,
@@ -87,7 +112,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${BASE_URL}/auth/signup`, {
         method: "POST",
-        credentials: "include", // This is crucial for receiving cookies
         headers: {
           "Content-Type": "application/json",
         },
@@ -101,6 +125,9 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
+        // Store token in localStorage
+        setToken(data.token);
+
         // Backend returns user data
         // Don't fetch user profile immediately to allow success message to show
         return { success: true, user: data };
@@ -117,26 +144,32 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Call the backend logout endpoint to clear the cookie
+      // Call the backend logout endpoint
       await fetch(`${BASE_URL}/auth/signout`, {
         method: "DELETE",
-        credentials: "include",
       });
     } catch (error) {
       console.error("Error during logout:", error);
     } finally {
-      // Clear local state regardless of backend response
+      // Remove token from localStorage and clear local state
+      removeToken();
       setUser(null);
     }
   };
 
   const updateProfile = async (profileData) => {
+    const token = getToken();
+
+    if (!token) {
+      return { success: false, message: "No authentication token found" };
+    }
+
     try {
       const response = await fetch(`${BASE_URL}/user/me`, {
         method: "PUT",
-        credentials: "include", // This is crucial for sending cookies
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(profileData),
       });
@@ -166,6 +199,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateProfile,
     fetchUserProfile,
+    getToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

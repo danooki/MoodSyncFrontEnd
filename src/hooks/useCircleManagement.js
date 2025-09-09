@@ -8,7 +8,7 @@ import {
 } from "../utils/errorUtils.js";
 
 export const useCircleManagement = () => {
-  const { logout, fetchUserProfile } = useAuth();
+  const { logout, fetchUserProfile, getToken } = useAuth();
   const navigate = useNavigate();
   const [circleName, setCircleName] = useState("");
   const [isCreatingCircle, setIsCreatingCircle] = useState(false);
@@ -21,6 +21,14 @@ export const useCircleManagement = () => {
 
   // Check if user is in a circle via GET.
   const checkCircleStatus = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     try {
       setIsLoadingCircle(true);
       setCircleError("");
@@ -28,9 +36,9 @@ export const useCircleManagement = () => {
       const url = `${BASE_URL}/circle/my-circle`;
 
       const response = await fetch(url, {
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -78,15 +86,23 @@ export const useCircleManagement = () => {
       return;
     }
 
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     setIsCreatingCircle(true);
     setError("");
 
     try {
       const response = await fetch(`${BASE_URL}/circle`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ circleName: circleName.trim() }),
       });
@@ -111,15 +127,23 @@ export const useCircleManagement = () => {
 
   // leave a circle via POST (cant use DEL because cant delete owner or circle)
   const handleLeaveCircle = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     setIsLeavingCircle(true);
     setError("");
 
     try {
       const response = await fetch(`${BASE_URL}/user/leave-circle`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ confirm: true }),
       });

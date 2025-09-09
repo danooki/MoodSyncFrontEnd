@@ -1,14 +1,24 @@
 import { BASE_URL } from "../config/api.js";
+import { useAuth } from "./useAuth.jsx";
 
 // Simple hook for checking question completion status
 const useQuestionStatus = () => {
-  
+  const { getToken } = useAuth();
+
   // Check if all questions are answered for today
   const checkIfAllQuestionsAnswered = async (totalQuestions) => {
+    const token = getToken();
+
+    if (!token) {
+      return false;
+    }
+
     try {
       const response = await fetch(`${BASE_URL}/daily-score`, {
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {

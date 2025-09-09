@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
-import { getApiErrorMessage, getNetworkErrorMessage } from "../utils/errorUtils.js";
+import {
+  getApiErrorMessage,
+  getNetworkErrorMessage,
+} from "../utils/errorUtils.js";
 
 // Simple hook for submitting answers
 const useAnswerSubmission = () => {
-  const { logout } = useAuth();
+  const { logout, getToken } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -15,14 +18,23 @@ const useAnswerSubmission = () => {
       return { success: false, error: "No question available" };
     }
 
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      return { success: false, error: "unauthorized" };
+    }
+
     try {
       setIsSubmitting(true);
       setError("");
 
       const response = await fetch(`${BASE_URL}/daily-score/answer`, {
         method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           questionId: questionId,
           choiceId: answer,

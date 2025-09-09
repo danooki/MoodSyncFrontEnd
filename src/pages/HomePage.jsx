@@ -17,7 +17,7 @@ import ProgressBanner from "../components/Features/ProgressBanner.jsx";
 import { PageHeader } from "../components/UI";
 
 const HomePage = () => {
-  const { user, fetchUserProfile } = useAuth();
+  const { user, fetchUserProfile, getToken, logout } = useAuth();
   const navigate = useNavigate();
 
   // Circle management hook
@@ -57,11 +57,21 @@ const HomePage = () => {
 
   // Simple function to fetch invitations
   const fetchCircleInvitationsData = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     setIsLoadingInvitations(true);
     try {
       const response = await fetch(`${BASE_URL}/circle/invites`, {
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
@@ -89,6 +99,14 @@ const HomePage = () => {
       return;
     }
 
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     setIsInviting(true);
     setInviteError("");
 
@@ -97,8 +115,10 @@ const HomePage = () => {
         `${BASE_URL}/circle/${circleStatus.circleId}/invite`,
         {
           method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ displayName: inviteDisplayName.trim() }),
         }
       );
@@ -119,13 +139,23 @@ const HomePage = () => {
 
   // Simple function to accept invitation
   const handleAcceptInvite = async (inviteId) => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     try {
       const response = await fetch(
         `${BASE_URL}/circle/invite/${inviteId}/accept`,
         {
           method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -141,13 +171,23 @@ const HomePage = () => {
 
   // Simple function to decline invitation
   const handleDeclineInvite = async (inviteId) => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     try {
       const response = await fetch(
         `${BASE_URL}/circle/invite/${inviteId}/decline`,
         {
           method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 

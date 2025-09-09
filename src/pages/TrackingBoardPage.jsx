@@ -18,7 +18,7 @@ import {
 } from "../utils/errorUtils.js";
 
 const TrackingBoardPage = () => {
-  const { user } = useAuth();
+  const { user, getToken, logout } = useAuth();
   const navigate = useNavigate();
   const [trackingBoard, setTrackingBoard] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,14 +29,22 @@ const TrackingBoardPage = () => {
   }, []);
 
   const fetchTrackingBoard = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     try {
       setIsLoading(true);
       setError("");
 
       const response = await fetch(`${BASE_URL}/tracking-board`, {
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

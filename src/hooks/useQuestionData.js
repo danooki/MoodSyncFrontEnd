@@ -8,7 +8,7 @@ import {
 
 // Simple hook for fetching and managing question data
 const useQuestionData = () => {
-  const { logout } = useAuth();
+  const { logout, getToken } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,13 +28,22 @@ const useQuestionData = () => {
 
   // Fetch the next question from the API
   const fetchNextQuestion = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      return { success: false, error: "unauthorized" };
+    }
+
     try {
       setError("");
       setIsLoading(true);
 
       const response = await fetch(`${BASE_URL}/daily-score/next-question`, {
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
