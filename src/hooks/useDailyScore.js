@@ -8,7 +8,7 @@ import {
 } from "../utils/errorUtils.js";
 
 export const useDailyScore = () => {
-  const { logout } = useAuth();
+  const { logout, getToken } = useAuth();
   const navigate = useNavigate();
 
   const [dailyScore, setDailyScore] = useState(null);
@@ -17,14 +17,22 @@ export const useDailyScore = () => {
 
   // Check daily score status
   const checkDailyScore = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     try {
       setError("");
       setIsLoadingDailyScore(true);
 
       const response = await fetch(`${BASE_URL}/daily-score`, {
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

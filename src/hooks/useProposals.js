@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
 import {
   getApiErrorMessage,
@@ -15,16 +16,25 @@ const useProposals = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { getToken, logout } = useAuth();
 
   const fetchProposals = async () => {
+    const token = getToken();
+
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
+    }
+
     try {
       setIsLoading(true);
       setError("");
 
       const response = await fetch(`${BASE_URL}/hard-proposals/today`, {
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

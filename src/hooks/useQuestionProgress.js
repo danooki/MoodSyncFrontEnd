@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "./useAuth.jsx";
 import { BASE_URL } from "../config/api.js";
 
 const useQuestionProgress = () => {
   const [progress, setProgress] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(4); // Max 4 questions per day.
+  const { getToken } = useAuth();
 
   const updateProgress = async () => {
+    const token = getToken();
+
+    if (!token) {
+      return { answeredCount: 0, totalQuestions };
+    }
+
     try {
       const response = await fetch(`${BASE_URL}/daily-score`, {
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
