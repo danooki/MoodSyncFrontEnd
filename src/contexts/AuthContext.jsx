@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const fetchUserProfile = async () => {
     // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
     // The backend will reject the request if the cookie is invalid
+    if (user) return;
     try {
       setIsLoading(true);
       const response = await fetch(`${BASE_URL}/user/me`, {
@@ -45,12 +46,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Check if user is already logged in on app load
+  // REMOVED: useEffect called fetchUserProfile on app load
+  /*   // Check if user is already logged in on app load
   useEffect(() => {
     // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
     // The backend will reject the request if the cookie is invalid
     fetchUserProfile();
-  }, []);
+  }, []); */
 
   const login = async (credentials) => {
     try {
