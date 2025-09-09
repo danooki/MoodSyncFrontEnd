@@ -66,13 +66,16 @@ const HomePage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setCircleInvitations(data || []);
+        // Ensure data is always an array to prevent map errors
+        setCircleInvitations(Array.isArray(data) ? data : []);
       } else if (response.status === 401) {
         logout();
         navigate("/login");
       }
     } catch (error) {
       console.error("Error fetching invitations:", error);
+      // Ensure invitations is always an array even on error
+      setCircleInvitations([]);
     } finally {
       setIsLoadingInvitations(false);
     }

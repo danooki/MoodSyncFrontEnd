@@ -10,7 +10,8 @@ const CircleInvitations = ({
   onDecline,
 }) => {
   // Only render if there are actual invitations
-  if (invitations.length === 0) {
+  // Add null/undefined check to prevent map errors
+  if (!invitations || !Array.isArray(invitations) || invitations.length === 0) {
     return null;
   }
 
