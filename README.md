@@ -3,22 +3,22 @@
 MoodSync is a WebApp that allows you and your friends to identify your mood and plan an evening based on it.
 A responsive browser + mobile React application made on JavaScript + React.
 
-## Features
+## Implemented
 
-- User authentication (login/register)
-- Daily question interface (DiSC)
-- Circle management and invitations
-- Progress tracking
-- User profile management
-- Match preview functionality
-- hardProposals (not AI generated)
+- **Developed** user authentication (login/register) with token management.
+- **Created** daily question interface based on DiSC personality assessment.
+- **Built** circle management system with invitation functionality.
+- **Implemented** real-time progress tracking.
+- **Designed** user profile management with editable fields and data persistence.
+- **Developed** match preview functionality for compatibility.
+- **Created** hardProposals system (non-AI generated content) for evening activity suggestions.
 
 **In Development:**
 
-- Phone view
-- Performance optimizations
-- User Settings
-- Final desing overhaul: enhance components
+- Mobile-responsive phone view optimization
+- Performance enhancements and code optimization
+- Advanced user settings and preferences
+- Final design overhaul with enhanced component library
 
 ## Quick Start
 
@@ -61,16 +61,7 @@ src/
 └── index.css              # Global styles with Tailwind CSS
 ```
 
-### Architecture Benefits
-
-- **Separation of Concerns**: Business logic separated from UI presentation
-- **Reusability**: UI components can be reused across different pages
-- **Maintainability**: Easier to locate and modify specific functionality
-- **Scalability**: New features can be added without affecting existing components
-
-## Routing
-
-### Valid Routes
+### Routing System
 
 - `/` → redirects to `/home`
 - `/login` → LoginPage (unauthenticated)
@@ -81,29 +72,44 @@ src/
 - `/tracking-board` → TrackingBoardPage (authenticated)
 - `/match-preview` → MatchPreviewPage (authenticated)
 
+## Technology Stack
+
+- **Frontend**: React 18, JavaScript ES6+, Vite
+- **Styling**: Tailwind CSS, Custom CSS
+- **State Management**: React Context API
+- **Routing**: React Router DOM
+- **Build Tools**: Vite, ESLint
+- **Deployment**: Render (hosting platform)
+
+### **Implemented** Architecture Benefits
+
+- **Achieved** separation of concerns by isolating logic from UI presentation.
+- **Created** reusable UI components.
+- **Established** maintainable codebase with easy-to-locate functionality.
+- **Built** scalable foundation allowing addition of new features
+
 ### Invalid Routes
 
 - Any invalid path → redirects to `/login` (unauthenticated) or `/home` (authenticated)
 
-## Development
+**Established** and **maintained** the following development standards:
 
-### Code Organization
+1. **Enforced** file limits under 200 lines for optimal maintainability
+2. **Separated** custom hooks for reusability
+3. **Implemented** descriptive component naming conventions
 
-1. **Keeping files under 200 lines** for maintainability
-2. **Separated logic** into custom hooks
-3. **Extract reusable UI patterns** into UI/ components
-4. **Use descriptive component names** that indicate their purpose
+### Folder Architecture Guidelines
 
-### Folder Architecture
-
-- **UI Components**: Place in `src/components/UI/` if pure presentational
-- **Logic Components**: Place in `src/components/` if containing business logic
-- **Custom Hooks**: Place in `src/hooks/` for reusable business logic
-- **Pages**: Place in `src/pages/` for route-specific components
+- **UI Components**: Organized in `src/components/UI/` for pure presentational elements
+- **Logic Components**: Placed in `src/components/` for business logic integration
+- **Custom Hooks**: Centralized in `src/hooks/` for reusable business logic
+- **Pages**: Structured in `src/pages/` for route-specific components
 
 ### Best Practices
 
-- Javascript + React
-- Implemented error boundaries and loading states
-- Established naming conventions
-- Tested components in isolation
+**Implemented** comprehensive quality measures:
+
+- **Utilized** JavaScript + React best practices
+- **Integrated** error boundaries and loading states throughout the application
+- **Established** consistent naming conventions across the codebase
+- **Conducted** component testing in isolation for reliability
