@@ -214,6 +214,7 @@ const HomePage = () => {
       <ProgressBanner
         currentStage={circleStatus?.isInCircle ? "circle" : "circle"}
         userHasCircle={circleStatus?.isInCircle}
+        hasAnsweredAllQuestions={hasAnsweredAllQuestions}
       />
       {/* Pending Invitations */}
       <CircleInvitations

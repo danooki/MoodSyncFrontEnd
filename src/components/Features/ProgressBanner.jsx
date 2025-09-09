@@ -1,14 +1,15 @@
 import React from "react";
 import Card from "../UI/Card";
 
-/**
- * ProgressBanner - Shows user journey progress with circular indicators
- * Displays 5 stages: Circle Setup → Questions → Tracking → Match → Proposals
- * Green circles for completed stages, grey for pending
- */
-const ProgressBanner = ({ currentStage, userHasCircle = false }) => {
+// Shows user journey progress with circular indicators
+
+const ProgressBanner = ({
+  currentStage,
+  userHasCircle = false,
+  hasAnsweredAllQuestions = false,
+}) => {
   // Define the 5 stages of the user journey
-  const stages = [
+  const allStages = [
     {
       id: "circle",
       name: userHasCircle ? "Circle Ready" : "Circle Setup",
@@ -54,6 +55,11 @@ const ProgressBanner = ({ currentStage, userHasCircle = false }) => {
     },
   ];
 
+  // Filter out the questions stage if all questions are answered
+  const stages = hasAnsweredAllQuestions
+    ? allStages.filter((stage) => stage.id !== "questions")
+    : allStages;
+
   // Find current stage index for mobile view
   const currentStageIndex = stages.findIndex(
     (stage) => stage.id === currentStage
@@ -94,7 +100,7 @@ const ProgressBanner = ({ currentStage, userHasCircle = false }) => {
               {index < stages.length - 1 && (
                 <div
                   className={`w-6 h-px mx-1 ${
-                    stage.completed ? "bg-green-100" : "bg-gray-300"
+                    stage.completed ? "bg-green-300" : "bg-gray-300"
                   }`}
                 />
               )}
@@ -128,7 +134,7 @@ const ProgressBanner = ({ currentStage, userHasCircle = false }) => {
               {index < mobileStages.length - 1 && (
                 <div
                   className={`w-4 h-px mx-1 ${
-                    stage.completed ? "bg-green-100" : "bg-gray-300"
+                    stage.completed ? "bg-green-300" : "bg-gray-300"
                   }`}
                 />
               )}
