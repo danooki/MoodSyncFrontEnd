@@ -43,9 +43,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Check if user is already logged in on app load
+  }; // Check if user is already logged in on app load
   useEffect(() => {
     // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
     // The backend will reject the request if the cookie is invalid
@@ -67,9 +65,13 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         // Backend returns user data and sets HTTP-only cookie
-        // After login, fetch the complete user profile including circle data
-        await fetchUserProfile();
-        return { success: true, user: data };
+        // Use the user data from login response directly
+        const userWithCircle = {
+          ...data.user,
+          circle: data.circle, // Include circle information from login response
+        };
+        setUser(userWithCircle);
+        return { success: true, user: userWithCircle };
       } else {
         // Use simplified error handling
         const errorMessage = getLoginErrorMessage(response, data);
