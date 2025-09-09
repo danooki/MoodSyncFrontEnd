@@ -10,7 +10,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchUserProfile = async () => {
     // HTTP-only cookies can't be read by JavaScript, so we'll always attempt to fetch
