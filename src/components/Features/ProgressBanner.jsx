@@ -71,6 +71,11 @@ const ProgressBanner = ({
   const mobileEndIndex = Math.min(stages.length - 1, safeCurrentStageIndex + 1);
   const mobileStages = stages.slice(mobileStartIndex, mobileEndIndex + 1);
 
+  // Add safety check to prevent map errors
+  if (!stages || !Array.isArray(stages) || stages.length === 0) {
+    return null;
+  }
+
   return (
     <div className="mb-6 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl px-6 py-3 shadow-sm">
       <div className="flex items-center justify-center">
