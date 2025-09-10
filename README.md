@@ -113,3 +113,4 @@ src/
 - **Integrated** error boundaries and loading states throughout the application
 - **Established** consistent naming conventions across the codebase
 - **Conducted** component testing in isolation for reliability
+- **Authentication**: Tokens are stored in localStorage and sent via Authorization headers (Bearer format).

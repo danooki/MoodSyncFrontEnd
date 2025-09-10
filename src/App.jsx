@@ -13,6 +13,7 @@ import MatchPreviewPage from "./pages/MatchPreviewPage";
 import ProfilePage from "./pages/ProfilePage";
 import ComponentTestPage from "./pages/ComponentTestPage";
 import AboutPage from "./pages/AboutPage";
+import DevelopmentPage from "./pages/DevelopmentPage";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
 
         {/* Public routes */}
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/development" element={<DevelopmentPage />} />
 
         {/* Protected routes - all nested under ProtectedLayout */}
         <Route element={<ProtectedLayout />}>

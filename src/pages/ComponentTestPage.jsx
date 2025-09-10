@@ -8,6 +8,14 @@ import CircleChoiceCard from "../components/Cards/CircleChoiceCard";
 import CircleWaitingCard from "../components/Cards/CircleWaitingCard";
 import CircleStatusCard from "../components/Cards/CircleStatusCard";
 import Navbar from "../components/Navigation/Navbar";
+import {
+  CircleIcon,
+  PlusIcon,
+  SuccessIcon,
+  InfoIcon,
+  WarningIcon,
+  ErrorIcon,
+} from "../components/UI/Icons";
 
 const ComponentTestPage = () => {
   const navigate = useNavigate();
@@ -220,6 +228,78 @@ const ComponentTestPage = () => {
                     retryButtonText="Try Again"
                     onCreateCircle={() => console.log("Create circle")}
                   />
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Icons Section */}
+          <Card className="mb-8">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Icons</h2>
+            <p className="text-gray-600 mb-6">
+              All available icons from the Icons component:
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              <div className="text-center">
+                <CircleIcon />
+                <p className="text-sm text-gray-600 mt-2">CircleIcon</p>
+              </div>
+              <div className="text-center">
+                <PlusIcon />
+                <p className="text-sm text-gray-600 mt-2">PlusIcon</p>
+              </div>
+              <div className="text-center">
+                <SuccessIcon />
+                <p className="text-sm text-gray-600 mt-2">SuccessIcon</p>
+              </div>
+              <div className="text-center">
+                <InfoIcon />
+                <p className="text-sm text-gray-600 mt-2">InfoIcon</p>
+              </div>
+              <div className="text-center">
+                <WarningIcon />
+                <p className="text-sm text-gray-600 mt-2">WarningIcon</p>
+              </div>
+              <div className="text-center">
+                <ErrorIcon />
+                <p className="text-sm text-gray-600 mt-2">ErrorIcon</p>
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <h3 className="text-lg font-medium text-gray-700 mb-4">
+                Icon Variants (Different Sizes)
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <h4 className="text-sm font-medium text-gray-600 mb-3">
+                    Small (w-12 h-12)
+                  </h4>
+                  <div className="flex justify-center space-x-4">
+                    <CircleIcon className="w-12 h-12" />
+                    <PlusIcon className="w-12 h-12" />
+                    <SuccessIcon className="w-12 h-12" />
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h4 className="text-sm font-medium text-gray-600 mb-3">
+                    Default (w-20 h-20)
+                  </h4>
+                  <div className="flex justify-center space-x-4">
+                    <InfoIcon />
+                    <WarningIcon />
+                    <ErrorIcon />
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h4 className="text-sm font-medium text-gray-600 mb-3">
+                    Large (w-24 h-24)
+                  </h4>
+                  <div className="flex justify-center space-x-4">
+                    <CircleIcon className="w-24 h-24" />
+                    <PlusIcon className="w-24 h-24" />
+                    <SuccessIcon className="w-24 h-24" />
+                  </div>
                 </div>
               </div>
             </div>
