@@ -250,7 +250,7 @@ const HomePage = () => {
       {/* Welcome Header */}
       <PageHeader
         title={`Welcome back, ${user?.displayName}!`}
-        subtitle="Ready to sync your mood with your circle?"
+        subtitle="Ready to sync your mood with the members of your circle?"
       />
 
       {/* Progress Banner */}
