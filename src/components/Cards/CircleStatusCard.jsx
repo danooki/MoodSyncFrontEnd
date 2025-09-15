@@ -53,7 +53,6 @@ const CircleStatusCard = ({
 
   if (circleStatus?.isInCircle) {
     const buttons = [];
-    const isOwner = circleStatus.owner._id === user?.id;
 
     // Primary button always comes first
     if (hasAnsweredAllQuestions) {
@@ -74,15 +73,13 @@ const CircleStatusCard = ({
       });
     }
 
-    // Secondary buttons follow - invite button only for owners
-    if (isOwner) {
-      buttons.push({
-        icon: "",
-        text: "Invite a Friend",
-        onClick: onInviteFriend,
-        variant: "secondary",
-      });
-    }
+    // Secondary button - invite button for all members
+    buttons.push({
+      icon: "",
+      text: "Invite a Friend",
+      onClick: onInviteFriend,
+      variant: "secondary",
+    });
 
     return (
       <GenericCard
@@ -95,28 +92,8 @@ const CircleStatusCard = ({
         }
         buttons={buttons}
       >
-        {/* Show role and timer below the buttons */}
+        {/* Show timer below the buttons */}
         <div className="mt-6 space-y-4">
-          {/* Role display */}
-          <div className="text-center">
-            <span
-              className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                isOwner
-                  ? "bg-purple-100 text-purple-800"
-                  : "bg-blue-100 text-blue-800"
-              }`}
-            >
-              {isOwner ? "Circle Owner" : "Circle Member"}
-            </span>
-          </div>
-
-          {/* Invite message for non-owners */}
-          {!isOwner && (
-            <div className="text-center text-gray-600 text-sm">
-              The owner of the circle can invite friends
-            </div>
-          )}
-
           {/* Show timer when all questions are answered */}
           {hasAnsweredAllQuestions && dailyScoreDate && (
             <QuestionResetTimer dailyScoreDate={dailyScoreDate} />

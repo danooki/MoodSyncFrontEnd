@@ -63,7 +63,6 @@ const InviteFriendModal = ({
             <li>
               • Remember: People can only belong to 1 circle (for now ...)
             </li>
-
             <li>
               • Make sure the display name is exactly as your friend registered
             </li>

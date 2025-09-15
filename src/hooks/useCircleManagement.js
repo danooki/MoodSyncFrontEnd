@@ -125,7 +125,7 @@ export const useCircleManagement = () => {
     }
   };
 
-  // leave a circle via POST (cant use DEL because cant delete owner or circle)
+  // leave a circle via POST
   const handleLeaveCircle = async () => {
     const token = getToken();
 
