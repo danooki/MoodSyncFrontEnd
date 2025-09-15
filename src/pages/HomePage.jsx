@@ -11,6 +11,7 @@ import {
 import CircleStatusCard from "../components/Cards/CircleStatusCard.jsx";
 import CircleChoiceCard from "../components/Cards/CircleChoiceCard.jsx";
 import CircleWaitingCard from "../components/Cards/CircleWaitingCard.jsx";
+import CircleInfoCard from "../components/Cards/CircleInfoCard.jsx";
 import CircleInvitations from "../components/Features/CircleInvitations.jsx";
 import InviteFriendModal from "../components/Modals/InviteFriendModal.jsx";
 import ProgressBanner from "../components/Features/ProgressBanner.jsx";
@@ -279,20 +280,41 @@ const HomePage = () => {
       />
       {/* Circle Status Card */}
       {circleStatus?.isInCircle ? (
-        <CircleStatusCard
-          user={user}
-          circleStatus={circleStatus}
-          isLoading={isLoadingCircle}
-          error={circleError}
-          onCreateCircle={handleCreateCircle}
-          onInviteFriend={handleInviteFriendClick}
-          onStartQuestions={handleStartQuestions}
-          hasAnsweredAllQuestions={hasAnsweredAllQuestions}
-          dailyScoreDate={dailyScoreDate}
-          circleName={circleName}
-          setCircleName={setCircleName}
-          isCreatingCircle={isCreatingCircle}
-        />
+        <>
+          <CircleStatusCard
+            user={user}
+            circleStatus={circleStatus}
+            isLoading={isLoadingCircle}
+            error={circleError}
+            onCreateCircle={handleCreateCircle}
+            onInviteFriend={handleInviteFriendClick}
+            onStartQuestions={handleStartQuestions}
+            hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+            dailyScoreDate={dailyScoreDate}
+            circleName={circleName}
+            setCircleName={setCircleName}
+            isCreatingCircle={isCreatingCircle}
+          />
+
+          {/* Circle Information Card */}
+          {circleStatus?.members && circleStatus.members.length > 0 && (
+            <CircleInfoCard
+              circleInfo={{
+                name: circleStatus.circleName,
+                memberCount: circleStatus.members.length,
+              }}
+              circleMembers={circleStatus.members.map((member) => ({
+                id: member._id,
+                displayName: member.displayName,
+                avatar: member.avatar,
+                dominant: member.dailyScore?.dailyDominantTrait || "Unknown",
+                hasAnsweredAllQuestions:
+                  !!member.dailyScore?.dailyDominantTrait,
+              }))}
+              showQuestionStatus={true}
+            />
+          )}
+        </>
       ) : (
         // Show choice flow when user has no circle
         <>
