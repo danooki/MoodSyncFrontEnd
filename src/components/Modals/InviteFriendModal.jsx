@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "../UI/Modal";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
-import { SuccessMessage } from "../UI";
+import { SuccessMessage, ErrorMessage } from "../UI";
 
 const InviteFriendModal = ({
   isOpen,
@@ -11,15 +11,13 @@ const InviteFriendModal = ({
   displayName,
   setDisplayName,
   success,
+  error,
   isInviting,
 }) => {
+  console.log("InviteFriendModal props:", { success, error, isInviting });
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Invite a Friend"
-      size="md"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="Invite a Friend" size="md">
       <div className="space-y-6">
         <p className="text-gray-600">
           Enter your friend's display name to send them a circle invitation.
@@ -30,12 +28,13 @@ const InviteFriendModal = ({
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            placeholder="Enter display name..."
+            placeholder="Enter your friend's or partner's user name..."
             disabled={isInviting}
             required
           />
 
           {success && <SuccessMessage message={success} />}
+          {error && <ErrorMessage message={error} />}
 
           <div className="flex space-x-3">
             <Button
@@ -60,8 +59,11 @@ const InviteFriendModal = ({
 
         {/* Help text for common issues */}
         <div className="pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500 mb-2">Tips:</p>
           <ul className="text-xs text-gray-500 space-y-1">
+            <li>
+              • Remember: People can only belong to 1 circle (for now ...)
+            </li>
+
             <li>
               • Make sure the display name is exactly as your friend registered
             </li>

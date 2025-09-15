@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useProposals from "../hooks/useProposals.js";
+import { useDailyScore } from "../hooks/useDailyScore.js";
 // components
 import {
   Button,
@@ -20,6 +21,11 @@ import ProgressBanner from "../components/Features/ProgressBanner.jsx";
 const ProposalsPage = () => {
   const navigate = useNavigate();
   const { proposals, isLoading, error, refetch } = useProposals();
+  const { hasAnsweredAllQuestions, checkDailyScore } = useDailyScore();
+
+  useEffect(() => {
+    checkDailyScore();
+  }, []);
   const handleBackToTrackingBoard = () => {
     navigate("/tracking-board");
   };
@@ -106,7 +112,11 @@ const ProposalsPage = () => {
       />
 
       {/* Progress Banner */}
-      <ProgressBanner currentStage="proposals" userHasCircle={true} />
+      <ProgressBanner
+        currentStage="proposals"
+        userHasCircle={true}
+        hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+      />
 
       {/* Circle Information Card */}
       <Card className="mb-8">

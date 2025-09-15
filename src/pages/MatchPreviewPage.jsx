@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
+import { useDailyScore } from "../hooks/useDailyScore.js";
 import { BASE_URL } from "../config/api.js";
 import MatchMemberCard from "../components/Cards/MatchMemberCard.jsx";
 import {
@@ -19,12 +20,14 @@ import {
 const MatchPreviewPage = () => {
   const { user, getToken, logout } = useAuth();
   const navigate = useNavigate();
+  const { hasAnsweredAllQuestions, checkDailyScore } = useDailyScore();
   const [matchPreview, setMatchPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     fetchMatchPreview();
+    checkDailyScore();
   }, []);
 
   const fetchMatchPreview = async () => {
@@ -118,7 +121,11 @@ const MatchPreviewPage = () => {
       />
 
       {/* Progress Banner */}
-      <ProgressBanner currentStage="match" userHasCircle={true} />
+      <ProgressBanner
+        currentStage="match"
+        userHasCircle={true}
+        hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+      />
 
       {/* Circle Members with DISC Traits */}
       <div className="space-y-6">
