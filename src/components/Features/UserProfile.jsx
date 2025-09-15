@@ -118,10 +118,6 @@ const UserProfile = ({ user }) => {
                     className="font-mono text-sm"
                   />
                   <ProfileField
-                    label="Role"
-                    value={user.circle.isOwner ? "Owner" : "Member"}
-                  />
-                  <ProfileField
                     label="Members"
                     value={user.circle.memberCount}
                   />
@@ -150,9 +146,7 @@ const UserProfile = ({ user }) => {
                     ) : (
                       <div className="space-y-3">
                         <p className="text-sm text-gray-600">
-                          {user.circle.isOwner
-                            ? "You are the owner. Leaving will transfer ownership to another member."
-                            : "Are you sure you want to leave this circle?"}
+                          Are you sure you want to leave this circle?
                         </p>
                         <div className="flex space-x-3">
                           <Button
