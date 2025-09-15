@@ -6,3 +6,5 @@ export { default as CircleChoiceCard } from "./CircleChoiceCard.jsx";
 export { default as CircleWaitingCard } from "./CircleWaitingCard.jsx";
 export { default as MatchMemberCard } from "./MatchMemberCard.jsx";
 export { default as ProposalCard } from "./ProposalCard.jsx";
+export { default as GenericCard } from "./GenericCard.jsx";
+export { default as ServerInfoCard } from "./ServerInfoCard.jsx";

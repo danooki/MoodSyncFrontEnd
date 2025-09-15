@@ -1,7 +1,7 @@
 import React from "react";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import ErrorDisplay from "../UI/ErrorDisplay";
-import GenericCard from "../UI/GenericCard";
+import GenericCard from "./GenericCard";
 import { CircleIcon, PlusIcon, QuestionResetTimer } from "../UI";
 import Card from "../UI/Card";
 import Input from "../UI/Input";
