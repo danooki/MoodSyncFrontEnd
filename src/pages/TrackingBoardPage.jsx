@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
+import { useDailyScore } from "../hooks/useDailyScore.js";
 import { BASE_URL } from "../config/api.js";
 // components
 import {
@@ -20,12 +21,14 @@ import {
 const TrackingBoardPage = () => {
   const { user, getToken, logout } = useAuth();
   const navigate = useNavigate();
+  const { hasAnsweredAllQuestions, checkDailyScore } = useDailyScore();
   const [trackingBoard, setTrackingBoard] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     fetchTrackingBoard();
+    checkDailyScore();
   }, []);
 
   const fetchTrackingBoard = async () => {
@@ -137,7 +140,11 @@ const TrackingBoardPage = () => {
       />
 
       {/* Progress Banner */}
-      <ProgressBanner currentStage="tracking" userHasCircle={true} />
+      <ProgressBanner
+        currentStage="tracking"
+        userHasCircle={true}
+        hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+      />
 
       {/* Circle Info */}
       {trackingBoard && (
