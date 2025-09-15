@@ -1,5 +1,5 @@
 import React from "react";
-import GenericCard from "../UI/GenericCard";
+import GenericCard from "./GenericCard";
 import { CircleIcon } from "../UI";
 import Button from "../UI/Button";
 

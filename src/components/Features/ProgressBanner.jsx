@@ -18,19 +18,9 @@ const ProgressBanner = ({
     },
     {
       id: "questions",
-      name:
-        currentStage === "questions" ||
-        currentStage === "tracking" ||
-        currentStage === "match" ||
-        currentStage === "proposals"
-          ? "Questions Answered"
-          : "Daily Questions",
+      name: hasAnsweredAllQuestions ? "Questions Answered" : "Daily Questions",
       description: "Answer mood assessment",
-      completed:
-        currentStage === "questions" ||
-        currentStage === "tracking" ||
-        currentStage === "match" ||
-        currentStage === "proposals",
+      completed: hasAnsweredAllQuestions,
     },
     {
       id: "tracking",

@@ -9,6 +9,7 @@ import {
   SuccessMessage,
   LoadingSpinner,
 } from "../components/UI";
+import { ServerInfoCard } from "../components/Cards";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -180,6 +181,8 @@ const RegisterPage = () => {
             </>
           )}
         </Card>
+
+        <ServerInfoCard />
       </div>
     </div>
   );

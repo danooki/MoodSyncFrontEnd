@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { Button, Input, Card, ErrorMessage } from "../components/UI";
+import { ServerInfoCard } from "../components/Cards";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -103,6 +104,8 @@ const LoginPage = () => {
             </div>
           </form>
         </Card>
+
+        <ServerInfoCard />
       </div>
     </div>
   );

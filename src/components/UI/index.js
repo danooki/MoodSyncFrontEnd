@@ -17,7 +17,6 @@ export { CircleIcon, PlusIcon } from "./Icons";
 // Existing Components
 export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as ErrorDisplay } from "./ErrorDisplay";
-export { default as GenericCard } from "./GenericCard";
 export { default as QuestionResetTimer } from "./QuestionResetTimer";
 
 // Message Components

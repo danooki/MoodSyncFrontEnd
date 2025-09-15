@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // hooks
 import { useAuth } from "../hooks/useAuth.jsx";
@@ -23,11 +23,15 @@ const QuestionInterfacePage = () => {
   const { checkIfAllQuestionsAnswered } = useQuestionStatus();
   const { progress, totalQuestions, updateProgress } = useQuestionProgress();
 
+  // Track if all questions are answered for ProgressBanner
+  const [hasAnsweredAllQuestions, setHasAnsweredAllQuestions] = useState(false);
+
   useEffect(() => {
     // Start question flow when user is available
     if (user) {
       // Check if all questions are already answered
       checkIfAllQuestionsAnswered(totalQuestions).then((allAnswered) => {
+        setHasAnsweredAllQuestions(allAnswered);
         if (allAnswered) {
           // All questions answered, go to tracking board
           navigate("/tracking-board");
@@ -103,14 +107,18 @@ const QuestionInterfacePage = () => {
       // Get updated progress info to check if limit reached
       const progressInfo = await updateProgress();
 
-      // Check if user has answered 4 questions
-      if (progressInfo.answeredCount >= 4) {
-        // All 4 questions answered, go to tracking board
+      // Check if user has answered all questions
+      const allAnswered =
+        progressInfo.answeredCount >= progressInfo.totalQuestions;
+      setHasAnsweredAllQuestions(allAnswered);
+
+      if (allAnswered) {
+        // All questions answered, go to tracking board
         navigate("/tracking-board");
         return;
       }
 
-      // only under 4 questions answered, fetch next question
+      // only under total questions answered, fetch next question
       const nextResult = await fetchNextQuestion();
       if (nextResult.success) {
         // Question loaded successfully, continue with next question
@@ -124,7 +132,11 @@ const QuestionInterfacePage = () => {
   return (
     <>
       {/* Progress Banner */}
-      <ProgressBanner currentStage="questions" userHasCircle={true} />
+      <ProgressBanner
+        currentStage="questions"
+        userHasCircle={true}
+        hasAnsweredAllQuestions={hasAnsweredAllQuestions}
+      />
 
       {/* Progress Bar */}
       <ProgressBar progress={progress} totalQuestions={totalQuestions} />

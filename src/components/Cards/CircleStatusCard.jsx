@@ -1,7 +1,7 @@
 import React from "react";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import ErrorDisplay from "../UI/ErrorDisplay";
-import GenericCard from "../UI/GenericCard";
+import GenericCard from "./GenericCard";
 import { CircleIcon, PlusIcon, QuestionResetTimer } from "../UI";
 import Card from "../UI/Card";
 import Input from "../UI/Input";
@@ -87,11 +87,11 @@ const CircleStatusCard = ({
     return (
       <GenericCard
         icon={<CircleIcon />}
-        title={`Your Circle: ${circleStatus.circleName}`}
+        title={`My Circle is ${circleStatus.circleName}`}
         description={
           hasAnsweredAllQuestions
             ? "You've completed today's mood assessment! Check how your circle is doing."
-            : "You're all set! Ready to answer today's questions?"
+            : "Your circle is ready. Now: Ready to answer today's questions?"
         }
         buttons={buttons}
       >
