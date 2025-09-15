@@ -47,6 +47,7 @@ const HomePage = () => {
   const [inviteDisplayName, setInviteDisplayName] = useState("");
   const [isInviting, setIsInviting] = useState(false);
   const [inviteError, setInviteError] = useState("");
+  const [inviteSuccess, setInviteSuccess] = useState("");
 
   // Simple invitations state
   const [circleInvitations, setCircleInvitations] = useState([]);
@@ -109,6 +110,7 @@ const HomePage = () => {
 
     setIsInviting(true);
     setInviteError("");
+    setInviteSuccess("");
 
     try {
       const response = await fetch(
@@ -124,8 +126,15 @@ const HomePage = () => {
       );
 
       if (response.ok) {
+        console.log("Invitation successful, setting success message");
+        setInviteSuccess("Invitation sent successfully!");
         setInviteDisplayName("");
-        setShowInviteModal(false);
+        // Close modal after showing success message
+        setTimeout(() => {
+          console.log("Closing this after success");
+          setShowInviteModal(false);
+          setInviteSuccess("");
+        }, 2000);
       } else {
         const data = await response.json();
         setInviteError(getApiErrorMessage(data, "Failed to send invitation"));
@@ -204,6 +213,7 @@ const HomePage = () => {
   const handleCloseInviteModal = () => {
     setShowInviteModal(false);
     setInviteError("");
+    setInviteSuccess("");
     setInviteDisplayName("");
   };
 
@@ -323,6 +333,7 @@ const HomePage = () => {
         onSubmit={handleInviteFriend}
         displayName={inviteDisplayName}
         setDisplayName={setInviteDisplayName}
+        success={inviteSuccess}
         error={inviteError}
         isInviting={isInviting}
       />
