@@ -9,7 +9,6 @@ import {
   SuccessMessage,
   LoadingSpinner,
 } from "../components/UI";
-import { ServerInfoCard } from "../components/Cards";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -83,7 +82,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -178,11 +177,20 @@ const RegisterPage = () => {
                   </Link>
                 </p>
               </div>
+
+              {/* Server notice */}
+              <div className="pt-4 border-t border-gray-200">
+                <ul className="text-xs text-gray-500 space-y-1">
+                  <li>• Small project on free servers :)</li>
+                  <li>
+                    • Login/registration may be slow at first, but runs smoothly
+                    once active
+                  </li>
+                </ul>
+              </div>
             </>
           )}
         </Card>
-
-        <ServerInfoCard />
       </div>
     </div>
   );
