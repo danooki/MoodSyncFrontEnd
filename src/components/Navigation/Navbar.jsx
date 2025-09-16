@@ -50,6 +50,11 @@ const Navbar = ({ onLogout, user }) => {
     setIsProfileMenuOpen(false);
   };
 
+  const handleFeedbackClick = () => {
+    navigate("/feedback");
+    setIsProfileMenuOpen(false);
+  };
+
   const handleLogoutClick = () => {
     onLogout();
     navigate("/login");
@@ -147,6 +152,14 @@ const Navbar = ({ onLogout, user }) => {
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors justify-start"
                   >
                     Profile Settings
+                  </Button>
+
+                  <Button
+                    onClick={handleFeedbackClick}
+                    variant="message"
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors justify-start"
+                  >
+                    Send Feedback
                   </Button>
 
                   <Button
