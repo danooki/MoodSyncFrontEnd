@@ -1,20 +1,9 @@
 import { useState } from "react";
-import { useAuth } from "../hooks/useAuth.jsx";
-import { useLogout } from "../hooks/useLogout.js";
-import { Navbar, OffNavBar } from "../components/Navigation/index.js";
-import BackgroundWrapper from "../components/UI/BackgroundWrapper.jsx";
 
 // About page with project information and how it works
 const AboutPage = () => {
-  const { user } = useAuth();
-  const { handleLogout } = useLogout();
-
   return (
-    <BackgroundWrapper>
-      {/* Navbar for navigation */}
-      {user ? <Navbar onLogout={handleLogout} user={user} /> : <OffNavBar />}
-
-      <div className="py-12">
+    <div className="py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
           <div className="text-center mb-16">
@@ -110,7 +99,6 @@ const AboutPage = () => {
           </div>
         </div>
       </div>
-    </BackgroundWrapper>
   );
 };
 

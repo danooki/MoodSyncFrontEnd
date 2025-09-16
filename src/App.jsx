@@ -14,6 +14,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ComponentTestPage from "./pages/ComponentTestPage";
 import AboutPage from "./pages/AboutPage";
 import DevelopmentPage from "./pages/DevelopmentPage";
+import FeedbackPage from "./pages/FeedbackPage";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 const App = () => {
@@ -22,23 +23,24 @@ const App = () => {
       {/* Components Page - completely independent, no layout */}
       <Route path="/components" element={<ComponentTestPage />} />
 
+      {/* All routes under RootLayout for consistent footer */}
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Navigate to="/home" />} />
 
-        {/* Auth routes */}
+        {/* Auth routes - no navbar, but get footer */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
 
-        {/* Public routes */}
+        {/* Public routes - get navbar and footer */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="/development" element={<DevelopmentPage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
 
-        {/* Protected routes - all nested under ProtectedLayout */}
+        {/* Protected routes - get navbar and footer */}
         <Route element={<ProtectedLayout />}>
           <Route path="/home" element={<HomePage />} />
-
           <Route path="/questions" element={<QuestionInterfacePage />} />
           <Route path="/tracking-board" element={<TrackingBoardPage />} />
           <Route path="/proposals" element={<ProposalsPage />} />
